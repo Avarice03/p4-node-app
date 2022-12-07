@@ -1,0 +1,120 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fefefe;
+}
+
+/* GRID */
+.grid-container {
+    display: grid;
+    height: 100vh;
+    grid-template: 5% 30% auto/ 200px auto;
+    grid-template-areas: 
+    "header header"
+    "top-cont top-cont"
+    "sidenav main-cont";
+}
+
+/* HEADER */
+.header {
+    grid-area: header;
+    background-color: #1f2937;
+    font-size: 24px;
+    font-weight: bold;
+    padding-left: 16px;
+    display: flex;
+    align-items: center;
+    color: #f9faf8;
+    border-bottom: 2px solid #5d6063;
+    font-family: 'Segou UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+/* TOP CONTENT */
+.top-container {
+    grid-area: top-cont;
+    background-color: #1f2937;
+    border-bottom: 2px solid #5d6063;
+    justify-content: center;
+    align-items: center; 
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segou UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.top-container h1 {
+    font-size: 54px;
+    font-weight: bolder;
+    color: #f9faf8;
+}
+
+.top-container h3 {
+    font-size: 18px;
+    color: #e5e7eb;
+}
+
+/* SIDENAV */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+
+a {
+    font-size: 24px;
+    text-decoration: none;
+    color: #111827;
+}
+
+.sidenav-container {
+    grid-area: sidenav;
+    height: auto;
+    display: block;
+    font-family: 'Segou UI', Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.sidenav {
+    border-right: 2px solid #5d6063;
+    width: 200px;
+    padding: 16px;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+}
+
+/* MAIN CONTENT */
+.main-container {
+    grid-area: main-cont;
+    display: flex;
+    margin:0 250px 0 50px;
+    gap: 1em;
+    padding: 1em;
+    flex-wrap: wrap;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    border: 1px solid #eee;
+    box-shadow: 2px 4px 16px rgba(0,0,0,.06);
+    border-radius: 5px;
+    padding: 1em;
+    font-size: 18px;
+    color: #5d6065;
+}
+
+.container h2 {
+    color: #5d6065;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+
