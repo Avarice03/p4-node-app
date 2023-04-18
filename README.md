@@ -8,29 +8,21 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 
 ### Endpoints
 
-|  #  | Action |             URL              | HTTP Verb |  CRUD  |                                           Description                                           |
-| :-: | :----: | :--------------------------: | :-------: | :----: | :---------------------------------------------------------------------------------------------: |
-|  1  | Create |        /api/v1/users         |   POST    | Create |                                        Create a new user                                        |
-|  2  | Create |        /api/v1/recipe        |   POST    | Create |                                       Create a new recipe                                       |
-|  3  | Create |       /api/v1/cuisine        |   POST    | Create |                                      Create a new cuisine                                       |
-|  4  | Create |       /api/v1/category       |   POST    | Create |                                      Create a new category                                      |
-|  5  |  Read  |        /api/v1/users         |    GET    |  Read  |                                     Gets the list of users                                      |
-|  6  |  Read  |      /api/v1/users/:id       |    GET    |  Read  |                                      Gets a specific user                                       |
-|  6  |  Read  |    /api/v1/users/recipes     |    GET    |  Read  |                           Gets the list of recipes of a specific user                           |
-|  7  |  Read  |        /api/v1/recipe        |    GET    |  Read  |                                  Gets the list of all recipes                                   |
-|  7  |  Read  |    /api/v1/recipe/public     |    GET    |  Read  |                                 Gets the list of public recipes                                 |
-|  8  |  Read  |      /api/v1/recipe/:id      |    GET    |  Read  |                                     Gets a specific recipe                                      |
-|  9  |  Read  |       /api/v1/cuisine        |    GET    |  Read  |                                    Gets the list of cuisines                                    |
-| 10  |  Read  |       /api/v1/category       |    GET    |  Read  |                                   Gets the list of categories                                   |
-| 11  |  Read  |       /api/v1/recipe?        |    GET    |  Read  | User can add a query parameter that will return the recipes that matches the cuisine & category |
-| 12  | Update |    /api/v1/users/:userid     |    PUT    | Update |                          Updates details of a user with the given id.                           |
-| 13  | Update |   /api/v1/recipe/:recipeId   |    PUT    | Update |                         Updates details of a recipe with the given id.                          |
-| 14  | Update |  /api/v1/cuisine/:cuisineId  |    PUT    | Update |                         Updates details of a cuisine with the given id.                         |
-| 15  | Update | /api/v1/category/:categoryId |    PUT    | Update |                        Updates details of a category with the given id.                         |
-| 16  | Delete |    /api/v1/users/:userid     |  DELETE   | Delete |                        Deletes the user with the given id from the list.                        |
-| 17  | Delete |   /api/v1/recipe/:recipeId   |  DELETE   | Delete |                       Deletes the recipe with the given id from the list.                       |
-| 18  | Delete |  /api/v1/cuisine/:cuisineId  |  DELETE   | Delete |                      Deletes the cuisine with the given id from the list.                       |
-| 19  | Delete | /api/v1/category/:categoryId |  DELETE   | Delete |                      Deletes the category with the given id from the list.                      |
+|  #  | Action |           URL            | HTTP Verb |  CRUD  |                                           Description                                           |
+| :-: | :----: | :----------------------: | :-------: | :----: | :---------------------------------------------------------------------------------------------: |
+|  1  | Create |      /api/v1/users       |   POST    | Create |                                        Create a new user                                        |
+|  2  | Create |      /api/v1/recipe      |   POST    | Create |                                       Create a new recipe                                       |
+|  3  |  Read  |      /api/v1/recipe      |    GET    |  Read  |                                  Gets the list of all recipes                                   |
+|  4  |  Read  |    /api/v1/recipe/:id    |    GET    |  Read  |                                     Gets a specific recipe                                      |
+|  5  |  Read  |  /api/v1/recipe/public   |    GET    |  Read  |                                 Gets the list of public recipes                                 |
+|  6  |  Read  |     /api/v1/recipe?      |    GET    |  Read  | User can add a query parameter that will return the recipes that matches the cuisine & category |
+|  7  |  Read  |      /api/v1/users       |    GET    |  Read  |                                     Gets the list of users                                      |
+|  8  |  Read  |    /api/v1/users/:id     |    GET    |  Read  |                                      Gets a specific user                                       |
+|  9  |  Read  |  /api/v1/users/recipes   |    GET    |  Read  |                           Gets the list of recipes of a specific user                           |
+| 10  | Update | /api/v1/recipe/:recipeId |    PUT    | Update |                         Updates details of a recipe with the given id.                          |
+| 11  | Update |  /api/v1/users/:userId   |    PUT    | Update |                          Updates details of a user with the given id.                           |
+| 12  | Delete | /api/v1/recipe/:recipeId |  DELETE   | Delete |                    Soft deletes the recipe with the given id from the list.                     |
+| 13  | Delete |  /api/v1/users/:userId   |  DELETE   | Delete |                     Soft deletes the user with the given id from the list.                      |
 
 ## User Stories
 

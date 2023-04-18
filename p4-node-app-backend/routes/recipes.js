@@ -10,6 +10,9 @@ router.get("/", recipeController.getAllRecipes);
 router.get("/public", recipeController.getPublicRecipes);
 
 // GET v1/recipes/:id
-router.get("/:id", recipeController.getSingleRecipe);
+router.get("/:recipeId", recipeController.getSingleRecipe);
+
+// DELETE v1/recipes/:id
+router.delete("/:recipeId", recipeController.deleteSingleRecipe);
 
 module.exports = router;

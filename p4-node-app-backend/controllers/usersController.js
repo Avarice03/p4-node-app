@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 const userController = {
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.find().populate("recipes");
+      const users = await User.find({ deletedAt: "" }).populate("recipes");
       res.json(users);
     } catch (error) {
       console.log(error);
@@ -13,7 +13,10 @@ const userController = {
   },
   getSingleUser: async (req, res, next) => {
     try {
-      const user = await User.findById(req.params.userId).populate("recipes");
+      const user = await User.findOne({
+        _id: req.params.userId,
+        deletedAt: "",
+      }).populate("recipes");
       if (!user) {
         return next(new HttpError("User does not exist", 404));
       }
@@ -25,9 +28,10 @@ const userController = {
   },
   getSingleUserRecipes: async (req, res) => {
     try {
-      const userRecipes = await User.findById(req.params.userId).populate(
-        "recipes"
-      );
+      const userRecipes = await User.findOne({
+        _id: req.params.userId,
+        deletedAt: "",
+      }).populate("recipes");
       if (!userRecipes) {
         return next(new HttpError("User does not exist", 404));
       }
@@ -35,6 +39,22 @@ const userController = {
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving user recipes.");
+    }
+  },
+  deleteSingleUser: async (req, res, next) => {
+    try {
+      const dateDeleted = new Date();
+      const userToDelete = await User.findOneAndUpdate(
+        { _id: req.params.userId, deletedAt: "" },
+        { deletedAt: dateDeleted }
+      );
+      if (!userToDelete) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      res.send(`${userToDelete.userName} user deleted.`);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("Error deleting user.");
     }
   },
   // addSingleUser: async (req, res) => {
@@ -45,15 +65,6 @@ const userController = {
   //   } catch (error) {
   //     console.log(error);
   //     res.status(400).send("Error adding user.");
-  //   }
-  // },
-  // deleteSingleUser: async (req, res) => {
-  //   try {
-  //     const deletedUser = await User.findByIdAndDelete(req.params.id);
-  //     res.send(`${deletedUser.name} user deleted`);
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(400).send("Error deleting user.");
   //   }
   // },
 };
