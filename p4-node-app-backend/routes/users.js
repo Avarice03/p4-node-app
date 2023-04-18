@@ -12,6 +12,12 @@ router.get("/:userId", userController.getSingleUser);
 // GET v1/users/:userId/recipes
 router.get("/:userId/recipes", userController.getSingleUserRecipes);
 
+// POST v1/users
+router.post("/", userController.addSingleUser);
+
+// PUT v1/users/:userId
+router.put("/:userId", userController.updateSingleUser);
+
 // DELETE v1/users/:userId
 router.delete("/:userId", userController.deleteSingleUser);
 

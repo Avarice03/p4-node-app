@@ -15,6 +15,7 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 |  3  |  Read  |      /api/v1/recipe      |    GET    |  Read  |                                  Gets the list of all recipes                                   |
 |  4  |  Read  |    /api/v1/recipe/:id    |    GET    |  Read  |                                     Gets a specific recipe                                      |
 |  5  |  Read  |  /api/v1/recipe/public   |    GET    |  Read  |                                 Gets the list of public recipes                                 |
+|  6  |  Read  |  /api/v1/recipe/search?  |    GET    |  Read  |      User can add a query parameter that will return the recipes that matches recipe name       |
 |  6  |  Read  |     /api/v1/recipe?      |    GET    |  Read  | User can add a query parameter that will return the recipes that matches the cuisine & category |
 |  7  |  Read  |      /api/v1/users       |    GET    |  Read  |                                     Gets the list of users                                      |
 |  8  |  Read  |    /api/v1/users/:id     |    GET    |  Read  |                                      Gets a specific user                                       |
@@ -32,8 +33,6 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 
 - I can add new users
 - I can add new recipes
-- I can add new cuisine
-- I can add new category
 
 ### As a developer, I can access data from MongoDB.
 
@@ -43,6 +42,7 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 - I can view the list of recipes
 - I can view the list of recipes by cuisine
 - I can view the list of recipes by category
+- I can search the list of recipes by name
 
 ### As a developer, I can update data from MongoDB.
 
@@ -50,8 +50,6 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 
 - I can update users
 - I can update recipes
-- I can update cuisines
-- I can update categories
 
 ### As a developer, I can delete data from MongoDB.
 

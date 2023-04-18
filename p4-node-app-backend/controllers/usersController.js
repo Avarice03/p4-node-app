@@ -41,6 +41,44 @@ const userController = {
       res.status(500).send("Error retrieving user recipes.");
     }
   },
+  addSingleUser: async (req, res) => {
+    try {
+      const user = new User(req.body);
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      user.deletedAt = "";
+      user.recipes = [];
+      await user.save();
+      res.send(`User created`);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("All fields are required");
+    }
+  },
+  updateSingleUser: async (req, res) => {
+    try {
+      const user = await User.findOneAndUpdate(
+        {
+          _id: req.params.userId,
+          deletedAt: "",
+        },
+        {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          userName: req.body.userName,
+          password: req.body.password,
+        }
+      );
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      res.send(`User ${user.userName} updated`);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send("Error updating user.");
+    }
+  },
   deleteSingleUser: async (req, res, next) => {
     try {
       const dateDeleted = new Date();
@@ -57,16 +95,6 @@ const userController = {
       res.status(400).send("Error deleting user.");
     }
   },
-  // addSingleUser: async (req, res) => {
-  //   try {
-  //     const user = new User(req.body);
-  //     await user.save();
-  //     res.send(task);
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(400).send("Error adding user.");
-  //   }
-  // },
 };
 
 module.exports = userController;

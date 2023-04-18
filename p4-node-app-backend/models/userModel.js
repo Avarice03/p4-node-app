@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 // Defining a schema
 const userSchema = new mongoose.Schema({
   deletedAt: String,
-  firstName: String,
-  lastName: String,
-  userName: String,
-  password: String,
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  userName: { type: String, required: true },
+  password: { type: String, required: true },
   recipes: [{ type: mongoose.Types.ObjectId, ref: "Recipe" }],
 });
 
