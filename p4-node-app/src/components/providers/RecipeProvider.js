@@ -77,7 +77,7 @@ export const RecipeProvider = (props) => {
         "2 cups bean sprouts",
         "3 green onions, chopped",
         "¼ cup crushed peanuts",
-        "1 lemon, cut into wedges",
+        "1 lemon, cut into wedges"
       ],
       instructions: [
         "Gather all ingredients.",
@@ -86,11 +86,11 @@ export const RecipeProvider = (props) => {
         "Heat oil in the wok over medium-high heat. Crack eggs into hot oil and cook until firm. Stir in chicken and cook for 5 minutes.",
         "Add softened noodles, sugar, fish sauce, vinegar, and red pepper; mix well until noodles are tender. Adjust seasonings to taste.",
         "Stir bean sprouts into wok and cook for 3 minutes.",
-        "Serve topped with green onions, crushed peanuts, and a wedge of lemon.",
+        "Serve topped with green onions, crushed peanuts, and a wedge of lemon."
       ],
       notes: "",
       image:
-        "https://www.allrecipes.com/thmb/U-Rg1Co-1t68gcMHf3SNpVxUVCA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/42968-pad-thai-4x3-1530-2a60081848f745379461240c5edcca3d.jpg",
+        "https://www.allrecipes.com/thmb/U-Rg1Co-1t68gcMHf3SNpVxUVCA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/42968-pad-thai-4x3-1530-2a60081848f745379461240c5edcca3d.jpg"
     },
     {
       id: uuid(),

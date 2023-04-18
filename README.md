@@ -16,7 +16,9 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 |  4  | Create |       /api/v1/category       |   POST    | Create |                                      Create a new category                                      |
 |  5  |  Read  |        /api/v1/users         |    GET    |  Read  |                                     Gets the list of users                                      |
 |  6  |  Read  |      /api/v1/users/:id       |    GET    |  Read  |                                      Gets a specific user                                       |
-|  7  |  Read  |        /api/v1/recipe        |    GET    |  Read  |                                    Gets the list of recipes                                     |
+|  6  |  Read  |    /api/v1/users/recipes     |    GET    |  Read  |                           Gets the list of recipes of a specific user                           |
+|  7  |  Read  |        /api/v1/recipe        |    GET    |  Read  |                                  Gets the list of all recipes                                   |
+|  7  |  Read  |    /api/v1/recipe/public     |    GET    |  Read  |                                 Gets the list of public recipes                                 |
 |  8  |  Read  |      /api/v1/recipe/:id      |    GET    |  Read  |                                     Gets a specific recipe                                      |
 |  9  |  Read  |       /api/v1/cuisine        |    GET    |  Read  |                                    Gets the list of cuisines                                    |
 | 10  |  Read  |       /api/v1/category       |    GET    |  Read  |                                   Gets the list of categories                                   |
