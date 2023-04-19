@@ -57,8 +57,6 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 
 - I can delete users
 - I can delete recipes
-- I can delete cuisines
-- I can delete categories
 
 ### As a developer, I can integrate the backend service to the frontend
 
