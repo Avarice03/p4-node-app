@@ -1,47 +1,13 @@
+const { config } = require("dotenv");
+const jwt = require("jsonwebtoken");
 const Recipe = require("../models/recipeModel");
 const User = require("../models/userModel");
 const HttpError = require("../models/httpError");
 
+config();
+const secret = process.env.SECRET;
+
 const recipeController = {
-  getAllRecipes: async (req, res) => {
-    try {
-      const { category, cuisine } = req.query;
-      if (category && cuisine) {
-        const capitalizedCategory =
-          category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-        const capitalizedCuisine =
-          cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase();
-        const recipes = await Recipe.find({
-          category: capitalizedCategory,
-          cuisine: capitalizedCuisine,
-          deletedAt: "",
-        });
-        res.json(recipes);
-      } else if (category) {
-        const capitalizedCategory =
-          category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
-        const recipes = await Recipe.find({
-          category: capitalizedCategory,
-          deletedAt: "",
-        });
-        res.json(recipes);
-      } else if (cuisine) {
-        const capitalizedCuisine =
-          cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase();
-        const recipes = await Recipe.find({
-          cuisine: capitalizedCuisine,
-          deletedAt: "",
-        });
-        res.json(recipes);
-      } else {
-        const recipes = await Recipe.find({ deletedAt: "" });
-        res.json(recipes);
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Error retrieving recipes.");
-    }
-  },
   getPublicRecipes: async (req, res) => {
     try {
       const publicRecipes = await Recipe.find({
@@ -54,16 +20,99 @@ const recipeController = {
       res.status(500).send("Error retrieving recipes.");
     }
   },
+  getPublicAndUserRecipes: async (req, res) => {
+    try {
+      const { category, cuisine } = req.query;
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      const allRecipes = await Recipe.find({
+        deletedAt: "",
+      });
+      const recipes = allRecipes.filter(
+        (recipe) =>
+          recipe.isPublic === true ||
+          user.recipes.includes(recipe._id.toString())
+      );
+      console.log(recipes);
+      if (category && cuisine) {
+        const filteredRecipes = recipes.filter(
+          (recipe) =>
+            recipe.category.toLowerCase() === category.toLowerCase() &&
+            recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (category) {
+        const filteredRecipes = recipes.filter(
+          (recipe) => recipe.category.toLowerCase() === category.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (cuisine) {
+        const filteredRecipes = recipes.filter(
+          (recipe) => recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else {
+        res.json(recipes);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error retrieving recipes.");
+    }
+  },
+  getUserRecipes: async (req, res) => {
+    try {
+      const { category, cuisine } = req.query;
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const userRecipes = await User.findOne({
+        _id: payload._id,
+      }).populate("recipes");
+      if (!userRecipes) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      if (category && cuisine) {
+        const filteredRecipes = userRecipes.recipes.filter(
+          (recipe) =>
+            recipe.category.toLowerCase() === category.toLowerCase() &&
+            recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (category) {
+        const filteredRecipes = userRecipes.recipes.filter(
+          (recipe) => recipe.category.toLowerCase() === category.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (cuisine) {
+        const filteredRecipes = userRecipes.recipes.filter(
+          (recipe) => recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else {
+        res.json(userRecipes.recipes);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error retrieving user recipes.");
+    }
+  },
   getSingleRecipe: async (req, res, next) => {
     try {
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
       const recipe = await Recipe.findOne({
         _id: req.params.recipeId,
         deletedAt: "",
       });
-      if (!recipe) {
+      const recipeExists = payload.recipes.includes(req.params.recipeId);
+      if (recipeExists || recipe.isPublic) {
+        res.json(recipe);
+      } else {
         return next(new HttpError("Recipe does not exist", 404));
       }
-      res.json(recipe);
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving recipe.");
@@ -72,14 +121,22 @@ const recipeController = {
   getSearchedRecipe: async (req, res, next) => {
     try {
       const { name } = req.query;
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
       const recipe = await Recipe.find({
         name: { $regex: name, $options: "i" },
         deletedAt: "",
       });
-      if (!recipe) {
-        return next(new HttpError("Recipe does not exist", 404));
-      }
-      res.json(recipe);
+      const recipes = recipe.filter(
+        (recipe) =>
+          recipe.isPublic === true ||
+          user.recipes.includes(recipe._id.toString())
+      );
+      res.json(recipes);
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving recipe.");
@@ -87,8 +144,10 @@ const recipeController = {
   },
   addSingleRecipe: async (req, res, next) => {
     try {
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
       // Check if user exists
-      const user = await User.findById(req.params.userId);
+      const user = await User.findById({ _id: payload._id });
 
       if (!user) {
         return next(new HttpError("User does not exist", 404));
@@ -123,42 +182,65 @@ const recipeController = {
   },
   updateSingleRecipe: async (req, res, next) => {
     try {
-      const recipe = await Recipe.findByIdAndUpdate(
-        req.params.recipeId,
-        {
-          isPublic: req.body.isPublic || false,
-          servings: req.body.servings || null,
-          category: req.body.category || "",
-          cuisine: req.body.cuisine || "",
-          description: req.body.description || "",
-          ingredients: req.body.ingredients || [],
-          instructions: req.body.instructions || [],
-          notes: req.body.notes || "",
-          image: req.body.image || "",
-        },
-        { new: true }
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      const recipeExists = user.recipes.some(
+        (recipeId) => recipeId.toString() === req.params.recipeId
       );
-
-      if (!recipe) {
+      if (recipeExists) {
+        const recipe = await Recipe.findByIdAndUpdate(
+          req.params.recipeId,
+          {
+            isPublic: req.body.isPublic,
+            name: req.body.name,
+            servings: req.body.servings,
+            category: req.body.category,
+            cuisine: req.body.cuisine,
+            description: req.body.description,
+            ingredients: req.body.ingredients,
+            instructions: req.body.instructions,
+            notes: req.body.notes,
+            image: req.body.image,
+          },
+          { new: true }
+        );
+        res.send(`${recipe.name} updated`);
+      } else {
         return next(new HttpError("Recipe does not exist", 404));
       }
-      res.send(`${recipe.name} updated`);
     } catch (error) {
       console.log(error);
       res.status(400).send("Error updating recipe.");
     }
   },
-  deleteSingleRecipe: async (req, res) => {
+  deleteSingleRecipe: async (req, res, next) => {
     try {
-      const dateDeleted = new Date();
-      const recipeToDelete = await Recipe.findOneAndUpdate(
-        { _id: req.params.recipeId, deletedAt: "" },
-        { deletedAt: dateDeleted }
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      const recipeExists = user.recipes.some(
+        (recipeId) => recipeId.toString() === req.params.recipeId
       );
-      if (!recipeToDelete) {
+      if (recipeExists) {
+        const dateDeleted = new Date();
+        const recipeToDelete = await Recipe.findOneAndUpdate(
+          { _id: req.params.recipeId, deletedAt: "" },
+          { deletedAt: dateDeleted }
+        );
+        if (!recipeToDelete) {
+          return next(new HttpError("Recipe does not exist", 404));
+        }
+        res.send(`${recipeToDelete.name} recipe deleted.`);
+      } else {
         return next(new HttpError("Recipe does not exist", 404));
       }
-      res.send(`${recipeToDelete.name} recipe deleted.`);
     } catch (error) {
       console.log(error);
       res.status(400).send("Error deleting recipe.");

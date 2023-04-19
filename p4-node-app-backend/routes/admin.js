@@ -7,15 +7,18 @@ config();
 
 const secret = process.env.SECRET;
 
-const userController = require("../controllers/usersController");
+const adminController = require("../controllers/adminController");
 
-// User authentication
 router.use("/", (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const verified = jwt.verify(token, secret);
     if (verified) {
-      next();
+      if (verified.isAdmin) {
+        next();
+      } else {
+        res.sendStatus(401);
+      }
     } else {
       res.sendStatus(401);
     }
@@ -24,13 +27,10 @@ router.use("/", (req, res, next) => {
   }
 });
 
-// GET v1/users/ (Get user details)
-router.get("/", userController.getSingleUser);
+// GET v1/admin/users (Get all users and their recipes)
+router.get("/users", adminController.getAllUsers);
 
-// PUT v1/users/ (Update user details)
-router.put("/", userController.updateSingleUser);
-
-// DELETE v1/users/ (Soft Delete user)
-router.delete("/", userController.deleteSingleUser);
+// GET v1/recipes
+router.get("/recipes", adminController.getAllRecipes);
 
 module.exports = router;

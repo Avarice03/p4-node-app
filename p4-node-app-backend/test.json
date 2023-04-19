@@ -29,4 +29,69 @@
     "notes": "",
     "image":
       "https://www.carolinescooking.com/wp-content/uploads/2021/05/vegetarian-bibimbap-sq-500x375.jpg"
-  }
+  },
+  {
+    "name": "Pork Sinigang",
+    "servings": 4,
+    "category": "Pork",
+    "cuisine": "Filipino",
+    "description":
+      "Sinigang is a Filipino soup cooked with pork. Serve with rice and for additional sauce, use soy or fish sauce. If you want to, you can add what Filipinos call gabi gabi, which is a small taro root. When peeled they look like potatoes. You can add five to six of them when you add the water and make sure they are cooked through. Take them out when they are cooked because they can get too soft.",
+    "ingredients": [
+      "1 tablespoon vegetable oil",
+      "1 small onion, chopped",
+      "1 teaspoon salt",
+      "1 (1/2 inch) piece fresh ginger, chopped",
+      "2 plum tomatoes, cut into 1/2-inch dice",
+      "1 pound bone-in pork chops",
+      "4 cups water, more if needed",
+      "1 (1.41 ounce) package tamarind soup base (such as Knorr®)",
+      "½ pound fresh green beans, trimmed"
+    ],
+    "instructions": [
+      "Heat vegetable oil in a skillet over medium heat. Add onion; cook and stir until softened and translucent, about 5 minutes. Season with salt.",
+      "Stir in ginger, tomatoes, and pork chops. Cover and reduce heat to medium-low. Turn the pork occasionally, until browned.",
+      "Pour in water and tamarind soup base. Bring to a boil, then reduce heat and simmer until the pork is tender and cooked through, about 30 minutes.",
+      "Stir in green beans and cook until tender."
+    ],
+    "notes": "",
+    "image":
+      "https://www.allrecipes.com/thmb/_9UwW0_g-P8MWHAfLVFWXtX6mBg=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/204958-pork-sinigang-mfs-4-59bbe7832c15444995d66644473dd3fc.jpg",
+  },
+      {
+      "name": "Spicy Salmon Maki",
+      "servings": 4,
+      "category": "Seafood",
+      "cuisine": "Japanese",
+      "description":
+        "I can't claim this to be authentic, but it sure was tasty and packed just enough heat for my preference. If you are concerned with raw fish, try using cold smoked salmon. I had enough for 5 rolls, your results may vary.",
+      "ingredients": [
+        "1 cup glutinous white rice (sushi rice)",
+        "1 ½ cups water",
+        "¼ cup rice wine vinegar",
+        "2 tablespoons white sugar",
+        "½ teaspoon salt",
+        "1 (1 ounce) package nori (dry seaweed)",
+        "1 medium avocado, thinly sliced",
+        "1 (8 ounce) farmed Atlantic salmon",
+        "3 stalks green onions, halved lengthwise",
+        "¼ cup sriracha mayonnaise (Kikkoman)",
+        "2 tablespoons hoisin sauce",
+        "2 teaspoons black sesame seeds",
+        "2 teaspoons toasted sesame seeds",
+        "½ teaspoon wasabi paste, or to taste",
+        "1 tablespoon pickled ginger, or to taste"
+      ],
+      "instructions": [
+        "Rinse rice in a strainer under cold running water until water runs clear. Combine rice and water in a saucepan. Bring to a boil over medium-high heat, reduce heat to low, cover, and cook for 20 minutes. Remove from heat.",
+        "Meanwhile, combine rice wine vinegar, sugar, and salt in a small saucepan. Cook over medium heat until sugar dissolves. Remove and allow to cool. Stir vinegar mixture into the cooked rice - rice will dry as it cools. Allow rice to cool completely, about 30 minutes.",
+        "Place a sheet of nori onto a sushi mat. Place about 1/2 cup rice on top and, using a rice paddle, spread rice onto the nori sheet.",
+        "Flip nori over so rice is facing down. Arrange 3 to 4 avocado slices, about 2 ounces salmon, 1 strip green onion, and 2 teaspoons Sriracha mayonnaise down the middle of the nori sheet.",
+        "Carefully, but tightly, roll nori up by closing in on the ingredients to form a roll. Drizzle each roll with hoisin sauce and more Sriracha mayonnaise and sprinkle with both types of sesame seeds.",
+        "Slice each sushi roll into 8 pieces. Serve with a dollop of wasabi and pickled ginger on the side."
+      ],
+      "notes":
+        "If you like, you can garnish the rolls with some masago (fish roe).",
+      "image":
+        "https://static.toiimg.com/thumb/54882405.cms?imgsize=547404&width=800&height=800"
+    },

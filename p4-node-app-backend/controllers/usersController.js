@@ -1,73 +1,37 @@
+const bcrypt = require("bcrypt");
+const { config } = require("dotenv");
+const jwt = require("jsonwebtoken");
 const HttpError = require("../models/httpError");
 const User = require("../models/userModel");
 
+config();
+const secret = process.env.SECRET;
+
 const userController = {
-  getAllUsers: async (req, res) => {
-    try {
-      const users = await User.find({ deletedAt: "" }).populate("recipes");
-      res.json(users);
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Error retrieving users.");
-    }
-  },
   getSingleUser: async (req, res, next) => {
     try {
-      const user = await User.findOne({
-        _id: req.params.userId,
-        deletedAt: "",
-      }).populate("recipes");
-      if (!user) {
-        return next(new HttpError("User does not exist", 404));
-      }
-      res.json(user);
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      res.json(payload);
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving user.");
     }
   },
-  getSingleUserRecipes: async (req, res) => {
+  updateSingleUser: async (req, res, next) => {
     try {
-      const userRecipes = await User.findOne({
-        _id: req.params.userId,
-        deletedAt: "",
-      }).populate("recipes");
-      if (!userRecipes) {
-        return next(new HttpError("User does not exist", 404));
-      }
-      res.json(userRecipes.recipes);
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Error retrieving user recipes.");
-    }
-  },
-  addSingleUser: async (req, res) => {
-    try {
-      const user = new User(req.body);
-      if (!user) {
-        return next(new HttpError("User does not exist", 404));
-      }
-      user.deletedAt = "";
-      user.recipes = [];
-      await user.save();
-      res.send(`User created`);
-    } catch (error) {
-      console.log(error);
-      res.status(400).send("All fields are required");
-    }
-  },
-  updateSingleUser: async (req, res) => {
-    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
+      const salt = await bcrypt.genSalt(3);
       const user = await User.findOneAndUpdate(
         {
-          _id: req.params.userId,
-          deletedAt: "",
+          _id: payload._id,
         },
         {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           userName: req.body.userName,
-          password: req.body.password,
+          password: await bcrypt.hash(req.body.password, salt),
         }
       );
       if (!user) {
@@ -81,9 +45,11 @@ const userController = {
   },
   deleteSingleUser: async (req, res, next) => {
     try {
+      const token = req.headers.authorization.split(" ")[1];
+      const payload = jwt.verify(token, secret);
       const dateDeleted = new Date();
       const userToDelete = await User.findOneAndUpdate(
-        { _id: req.params.userId, deletedAt: "" },
+        { _id: payload._id },
         { deletedAt: dateDeleted }
       );
       if (!userToDelete) {

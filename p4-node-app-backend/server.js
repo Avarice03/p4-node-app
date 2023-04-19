@@ -13,8 +13,11 @@ const database = process.env.DATABASE;
 
 const app = express();
 
-const recipeRouter = require("./routes/recipes");
+const signupRouter = require("./routes/signup");
+const loginRouter = require("./routes/login");
+const adminRouter = require("./routes/admin");
 const userRouter = require("./routes/users");
+const recipeRouter = require("./routes/recipes");
 const HttpError = require("./models/httpError");
 
 // Middleware to parse incoming request bodies
@@ -22,8 +25,12 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/v1/recipes", recipeRouter);
+app.use("/v1/signup", signupRouter);
+app.use("/v1/login", loginRouter);
+app.use("/v1/admin", adminRouter);
 app.use("/v1/users", userRouter);
+app.use("/v1/recipes", recipeRouter);
+
 
 // Handling unknown routes
 app.use((req, res, next) => {
