@@ -11,6 +11,7 @@ import { RecipeProvider } from "./components/providers/RecipeProvider";
 import { UserProvider } from "./components/providers/User";
 import RecipePage from "./components/pages/RecipePage";
 import RecipeForm from "./components/pages/RecipeForm";
+import Signup from "./components/pages/Signup";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,7 @@ function App() {
         { path: "timer", element: <Timer /> },
         { path: "about-this-app", element: <About /> },
         { path: "contact-me", element: <Contact /> },
+        { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
       ],
     },

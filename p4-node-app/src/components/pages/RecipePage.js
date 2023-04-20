@@ -12,7 +12,7 @@ function RecipePage() {
   const [recipes,] = useContext(RecipeContext);
   const [admin,] = useContext(UserContext);
   // Data of the recipe clicked based on its id
-  const currentRecipe = recipes.filter((recipe) => recipe.id === id);
+  const currentRecipe = recipes.filter((recipe) => recipe._id === id);
   // Remove the object from array
   const recipe = currentRecipe.shift();
 

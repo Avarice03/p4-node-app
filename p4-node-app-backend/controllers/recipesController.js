@@ -10,17 +10,37 @@ const secret = process.env.SECRET;
 const recipeController = {
   getPublicRecipes: async (req, res) => {
     try {
+      const { category, cuisine} = req.query;
       const publicRecipes = await Recipe.find({
         isPublic: true,
         deletedAt: "",
       });
-      res.json(publicRecipes);
+      if (category && cuisine) {
+        const filteredRecipes = publicRecipes.filter(
+          (recipe) =>
+            recipe.category.toLowerCase() === category.toLowerCase() &&
+            recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (category) {
+        const filteredRecipes = publicRecipes.filter(
+          (recipe) => recipe.category.toLowerCase() === category.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else if (cuisine) {
+        const filteredRecipes = publicRecipes.filter(
+          (recipe) => recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+        );
+        res.json(filteredRecipes);
+      } else {
+        res.json(publicRecipes);
+      }
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving recipes.");
     }
   },
-  getPublicAndUserRecipes: async (req, res) => {
+  getPublicAndUserRecipes: async (req, res, next) => {
     try {
       const { category, cuisine } = req.query;
       const token = req.headers.authorization.split(" ")[1];
@@ -37,7 +57,6 @@ const recipeController = {
           recipe.isPublic === true ||
           user.recipes.includes(recipe._id.toString())
       );
-      console.log(recipes);
       if (category && cuisine) {
         const filteredRecipes = recipes.filter(
           (recipe) =>
@@ -103,40 +122,20 @@ const recipeController = {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
       const recipe = await Recipe.findOne({
         _id: req.params.recipeId,
         deletedAt: "",
       });
-      const recipeExists = payload.recipes.includes(req.params.recipeId);
+      const recipeExists = user.recipes.includes(req.params.recipeId);
       if (recipeExists || recipe.isPublic) {
         res.json(recipe);
       } else {
         return next(new HttpError("Recipe does not exist", 404));
       }
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Error retrieving recipe.");
-    }
-  },
-  getSearchedRecipe: async (req, res, next) => {
-    try {
-      const { name } = req.query;
-      const token = req.headers.authorization.split(" ")[1];
-      const payload = jwt.verify(token, secret);
-      const user = await User.findById({ _id: payload._id });
-      if (!user) {
-        return next(new HttpError("User does not exist", 404));
-      }
-      const recipe = await Recipe.find({
-        name: { $regex: name, $options: "i" },
-        deletedAt: "",
-      });
-      const recipes = recipe.filter(
-        (recipe) =>
-          recipe.isPublic === true ||
-          user.recipes.includes(recipe._id.toString())
-      );
-      res.json(recipes);
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving recipe.");

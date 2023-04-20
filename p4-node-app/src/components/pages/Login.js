@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import chef from "../images/chef.png";
 import { UserContext } from "../providers/User";
 
@@ -64,18 +64,11 @@ function Login() {
               Sign in
             </button>
           </form>
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => navigate("/recipes")}
-          >
-            Sign in as Guest
-          </button>
         </div>
       </div>
       <div className="create-container">
         <span>New to RecipeEZ?</span>
-        <a href="/">Create an account.</a>
+        <NavLink to="/signup">Create an account.</NavLink>
       </div>
     </div>
   );

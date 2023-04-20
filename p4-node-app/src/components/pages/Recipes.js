@@ -1,19 +1,45 @@
-import React, { useCallback, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import FilterCategory from "../FilterCategory";
 import { RecipeContext } from "../providers/RecipeProvider";
 import { UserContext } from "../providers/User";
 import RecipeButton from "../RecipeButton";
+import axios from "axios";
 
 // Recipes Home page for RecipeEZ
 function Recipes() {
   const [recipes, setRecipes] = useContext(RecipeContext);
-  const [admin,] = useContext(UserContext);
+  const [admin] = useContext(UserContext);
   const navigate = useNavigate();
   const [recipesCopy, setRecipesCopy] = useState(recipes);
-  const [category, setCategory] = useState("All");
-  const [cuisine, setCuisine] = useState("All");
+  const [category, setCategory] = useState("");
+  const [cuisine, setCuisine] = useState("");
   const [word, searchWord] = useState("");
+  const query = new URLSearchParams(useLocation().search);
+  let categoryQuery = query.get("category");
+  let cuisineQuery = query.get("cuisine");
+
+  if (categoryQuery === null){
+    categoryQuery = "";
+  }
+  if (cuisineQuery === null){
+    cuisineQuery = "";
+  }
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:3069/v1/recipes?category=${categoryQuery}&cuisine=${cuisineQuery}`
+        );
+        console.log("data", data);
+        setRecipesCopy(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetch();
+  }, [categoryQuery, cuisineQuery]);
 
   // Push each category intro  an array
   const categories = recipes.reduce((categories, recipe) => {
@@ -32,35 +58,40 @@ function Recipes() {
   }, []);
 
   // Function for filtering recipes based on category and cuisine
-  const filterCategory = useCallback((category, cuisine) => {
-    setCategory(category);
-    setCuisine(cuisine);
+  const filterCategory = useCallback(
+    (category, cuisine) => {
+      setCategory(category);
+      setCuisine(cuisine);
 
-    let selectedCategory;
-    if (category === "All" && cuisine === "All") {
-      selectedCategory = recipes;
-    } else if (category !== "All" && cuisine === "All") {
-      selectedCategory = recipes.filter(
-        (recipe) => recipe.category === category
-      );
-    } else if (category === "All" && cuisine !== "All") {
-      selectedCategory = recipes.filter((recipe) => recipe.cuisine === cuisine);
-    } else if (category !== "All" && cuisine !== "All") {
-      selectedCategory = recipes.filter(
-        (recipe) => recipe.category === category && recipe.cuisine === cuisine
-      );
-    }
-    setRecipesCopy(selectedCategory);
-  }, [recipes]);
+      // let selectedCategory;
+      // if (category === "All" && cuisine === "All") {
+      //   selectedCategory = recipes;
+      // } else if (category !== "All" && cuisine === "All") {
+      //   selectedCategory = recipes.filter(
+      //     (recipe) => recipe.category === category
+      //   );
+      // } else if (category === "All" && cuisine !== "All") {
+      //   selectedCategory = recipes.filter((recipe) => recipe.cuisine === cuisine);
+      // } else if (category !== "All" && cuisine !== "All") {
+      //   selectedCategory = recipes.filter(
+      //     (recipe) => recipe.category === category && recipe.cuisine === cuisine
+      //   );
+      // }
+      // setRecipesCopy(selectedCategory);
+    },
+    []
+  );
 
   // Function for removing category tags
   const deleteCategory = () => {
-    filterCategory("All", cuisine);
+    filterCategory("", cuisine);
+    navigate(`/recipes?&cuisine=${cuisine}`);
   };
 
   // Function for removing cuisine tags
   const deleteCuisine = () => {
-    filterCategory(category, "All");
+    filterCategory(category, "");
+    navigate(`/recipes?category=${category}`);
   };
 
   // Function for searching recipe names
@@ -143,7 +174,7 @@ function Recipes() {
         </div>
       </div>
       <div className="filters-container">
-        {category === "All" ? (
+        {category === "" ? (
           ""
         ) : (
           <button
@@ -155,7 +186,7 @@ function Recipes() {
             <span className="btn-close"></span>
           </button>
         )}
-        {cuisine === "All" ? (
+        {cuisine === "" ? (
           ""
         ) : (
           <button
@@ -171,8 +202,8 @@ function Recipes() {
       <div className="recipes-item-container">
         {recipesCopy.map((recipe) => (
           <RecipeButton
-            key={recipe.id}
-            id={recipe.id}
+            key={recipe._id}
+            id={recipe._id}
             name={recipe.name}
             image={recipe.image}
             handleDelete={handleDelete}

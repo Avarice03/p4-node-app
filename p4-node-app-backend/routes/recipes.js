@@ -7,39 +7,41 @@ config();
 const secret = process.env.SECRET;
 const recipeController = require("../controllers/recipesController");
 
+router.get("/", recipeController.getPublicRecipes);
+
 router.use("/", (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const verified = jwt.verify(token, secret);
     if (verified) {
-        next();
+      tokenExists = true;
+      next();
     } else {
       res.sendStatus(401);
     }
   } catch (err) {
+    console.log(err);
     res.sendStatus(401);
   }
 });
 
-// GET v1/recipes/ (Get public and user recipes)
-router.get("/", recipeController.getPublicAndUserRecipes);
 
-// GET v1/recipes/user (Get user recipes only)
-router.get("/user", recipeController.getUserRecipes);
+// // GET v1/recipes/ (Get public and user recipes)
+router.get("/user", recipeController.getPublicAndUserRecipes);
 
-// GET v1/recipes/search?
-router.get("/search", recipeController.getSearchedRecipe);
+// // GET v1/recipes/user (Get user recipes only)
+// router.get("/user", recipeController.getUserRecipes);
 
 // GET v1/recipes/:recipeId
-router.get("/:recipeId", recipeController.getSingleRecipe);
+router.get("/user/:recipeId", recipeController.getSingleRecipe);
 
 // POST v1/recipes/
-router.post("/", recipeController.addSingleRecipe);
+router.post("/user/", recipeController.addSingleRecipe);
 
 // PUT v1/recipes/
-router.put("/:recipeId", recipeController.updateSingleRecipe);
+router.put("/user/:recipeId", recipeController.updateSingleRecipe);
 
 // DELETE v1/recipes/
-router.delete("/:recipeId", recipeController.deleteSingleRecipe);
+router.delete("/user/:recipeId", recipeController.deleteSingleRecipe);
 
 module.exports = router;
