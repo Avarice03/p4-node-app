@@ -50,7 +50,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(`mongodb+srv://${dbHost}:${dbPort}/${database}`)
+  .connect(`mongodb+srv://${dbHost}:${dbPort}/${database}?retryWrites=true&w=majority`)
   .then(() => {
     console.log("Connected to MongoDB");
   })
