@@ -24,7 +24,6 @@ export const RecipeProvider = (props) => {
     };
     fetchRecipes();
   }, [isLoggedIn]);
-  
   return (
     <RecipeContext.Provider value={[recipes, setRecipes]}>
       {props.children}

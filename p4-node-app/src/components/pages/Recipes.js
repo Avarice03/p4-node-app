@@ -8,8 +8,8 @@ import axios from "axios";
 
 // Recipes Home page for RecipeEZ
 function Recipes() {
-  const [recipes, setRecipes] = useContext(RecipeContext);
-  const [isLoggedIn] = useContext(UserContext);
+  const [recipes, ] = useContext(RecipeContext);
+  const [isLoggedIn,] = useContext(UserContext);
   const navigate = useNavigate();
   const [recipesCopy, setRecipesCopy] = useState(recipes);
   const [category, setCategory] = useState("");
@@ -116,16 +116,16 @@ function Recipes() {
     searchWord("");
   };
 
-  // Function for deleting recipe
-  const handleDelete = (id) => {
-    const currentRecipes = recipesCopy;
-    const remainingRecipes = recipes.filter((recipe) => recipe.id !== id);
-    const remainingCurrentRecipes = currentRecipes.filter(
-      (recipe) => recipe.id !== id
-    );
-    setRecipes(remainingRecipes);
-    setRecipesCopy(remainingCurrentRecipes);
-  };
+  // // Function for deleting recipe
+  // const handleDelete = (id) => {
+  //   const currentRecipes = recipesCopy;
+  //   const remainingRecipes = recipes.filter((recipe) => recipe.id !== id);
+  //   const remainingCurrentRecipes = currentRecipes.filter(
+  //     (recipe) => recipe.id !== id
+  //   );
+  //   setRecipes(remainingRecipes);
+  //   setRecipesCopy(remainingCurrentRecipes);
+  // };
 
   // Function for navigating to the recipe page of recipe clicked
   const showRecipe = (id) => {
@@ -159,7 +159,7 @@ function Recipes() {
           {isLoggedIn ? (
             <button
               className="btn btn-secondary"
-              onClick={() => navigate(`/recipe/add`)}
+              onClick={() => navigate(`/recipe/add-recipe`)}
             >
               Add Item
             </button>
@@ -234,7 +234,7 @@ function Recipes() {
             id={recipe._id}
             name={recipe.name}
             image={recipe.image}
-            handleDelete={handleDelete}
+            // handleDelete={handleDelete}
             showRecipe={showRecipe}
           />
         ))}

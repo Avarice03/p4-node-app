@@ -1,10 +1,13 @@
 import React, { useContext, useState } from "react";
 import { UserDetailsContext } from "../providers/UserDetailsProvider";
 import { useNavigate } from "react-router-dom";
-import { updateUserDetails } from "../services/RecipesService";
+import { deleteUser, getPublicRecipes, updateUserDetails } from "../services/RecipesService";
+import { UserContext } from "../providers/User";
+import { RecipeContext } from "../providers/RecipeProvider";
 
 function Account() {
   const [userDetails, setUserDetails] = useContext(UserDetailsContext);
+  const [,setRecipes] = useContext(RecipeContext);
   const [userName, setUserName] = useState(userDetails.userName);
   const [firstName, setFirstName] = useState(userDetails.firstName);
   const [lastName, setLastName] = useState(userDetails.lastName);
@@ -14,6 +17,7 @@ function Account() {
   const [passErrMessage, setPassErrMessage] = useState([]);
   const [confirmErrMessage, setConfirmErrMessage] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
+  const [, setLoggedIn] = useContext(UserContext);
   const pass = document.querySelectorAll(".pass");
   const togglePassword = document.querySelector("#togglePassword");
   const navigate = useNavigate();
@@ -67,8 +71,12 @@ function Account() {
           setPassErrMessage([]);
           if (confirm === password) {
             const userDetails = {
-              firstName: firstName,
-              lastName: lastName,
+              firstName:
+                firstName.charAt(0).toUpperCase() +
+                firstName.slice(1).toLowerCase(),
+              lastName:
+                lastName.charAt(0).toUpperCase() +
+                lastName.slice(1).toLowerCase(),
               userName: userName,
               password: password,
             };
@@ -97,130 +105,193 @@ function Account() {
     }
   };
 
-  const handleDeleteUser = () => {};
+  //Function for hiding and showing password
+  const showPassword = () => {
+    togglePassword.classList.toggle("bi-eye");
+    pass.forEach((pass) => {
+      if (pass.type === "password") {
+        pass.type = "text";
+      } else {
+        pass.type = "password";
+      }
+    });
+  };
 
-    //Function for hiding and showing password
-    const showPassword = () => {
-        togglePassword.classList.toggle("bi-eye");
-        pass.forEach((pass) => {
-          if (pass.type === "password") {
-            pass.type = "text";
-          } else {
-            pass.type = "password";
-          }
-        });
-      };
+  // Function for deleting user account
+  const handleDeleteUser = async () => {
+    try {
+      const response = await deleteUser();
+      setResponseMessage(response.data.message);
+      setLoggedIn(false);
+      const data = await getPublicRecipes();
+      setRecipes(data);
+      alert("User deleted");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setResponseMessage(error.response.data.message);
+    }
+  };
 
   return (
-    <div className="signin-container">
-      <h1>
-        Hi, {userDetails.firstName} {userDetails.lastName} 👋
-      </h1>
-      <div className="login-container">
-        <div className="form-container">
-          <form onSubmit={(e) => e.preventDefault()}>
-            <p>Username:</p>
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              style={{ width: "100%", marginBottom: "0.5em" }}
-              required
-            />
-            <small style={{ color: "red", marginBottom: "0.5em" }}>
-              {userErrMessage}
-            </small>
-            <p>First Name:</p>
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              style={{ width: "100%", marginBottom: "0.5em" }}
-              required
-            />
-            <p>Last Name:</p>
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              style={{ width: "100%", marginBottom: "0.5em" }}
-              required
-            />
-            <p>Password:</p>
-            <input
-              type="password"
-              className="pass"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ width: "100%", marginBottom: "0.5em" }}
-              required
-            />
-            <i
-              className="bi bi-eye-slash"
-              id="togglePassword"
-              style={{ marginLeft: "-30px", cursor: "pointer" }}
-              onClick={showPassword}
-            ></i>
-            {passErrMessage.map((error) => (
-              <p
-                key={error}
-                style={{
-                  color: "red",
-                  marginBottom: "0.5em",
-                  fontSize: "small",
-                }}
-              >
-                {error}
-              </p>
-            ))}
-            <p>Confirm Password:</p>
-            <input
-              type="password"
-              className="pass"
-              value={confirm}
-              onChange={(e) => confirmPass(e.target.value)}
-              style={{ width: "100%", marginBottom: "0.5em" }}
-              required
-            />
-            <p>
+    <>
+      <div className="signin-container">
+        <h1>
+          Hi, {userDetails.firstName} {userDetails.lastName} 👋
+        </h1>
+        <div className="login-container">
+          <div className="form-container">
+            <form onSubmit={(e) => e.preventDefault()}>
+              <p>Username:</p>
+              <input
+                type="text"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                style={{ width: "100%", marginBottom: "0.5em" }}
+                required
+              />
               <small style={{ color: "red", marginBottom: "0.5em" }}>
-                {confirmErrMessage}
+                {userErrMessage}
               </small>
-            </p>
-            <center>
-              <p>
-                <strong
+              <p>First Name:</p>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                style={{ width: "100%", marginBottom: "0.5em" }}
+                required
+              />
+              <p>Last Name:</p>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                style={{ width: "100%", marginBottom: "0.5em" }}
+                required
+              />
+              <p>Password:</p>
+              <input
+                type="password"
+                className="pass"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{ width: "100%", marginBottom: "0.5em" }}
+                required
+              />
+              <i
+                className="bi bi-eye-slash"
+                id="togglePassword"
+                style={{ marginLeft: "-30px", cursor: "pointer" }}
+                onClick={showPassword}
+              ></i>
+              {passErrMessage.map((error) => (
+                <p
+                  key={error}
                   style={{
                     color: "red",
                     marginBottom: "0.5em",
+                    fontSize: "small",
                   }}
                 >
-                  {responseMessage}
-                </strong>
+                  {error}
+                </p>
+              ))}
+              <p>Confirm Password:</p>
+              <input
+                type="password"
+                className="pass"
+                value={confirm}
+                onChange={(e) => confirmPass(e.target.value)}
+                style={{ width: "100%", marginBottom: "0.5em" }}
+                required
+              />
+              <p>
+                <small style={{ color: "red", marginBottom: "0.5em" }}>
+                  {confirmErrMessage}
+                </small>
               </p>
-            </center>
-            <button
-              type="submit"
-              className="btn btn-danger"
-              onClick={handleUpdateUser}
-              style={{ marginBottom: "0.5em", width: "100%" }}
-              required
-            >
-              Update Details
-            </button>
-            <button
-              type="submit"
-              className="btn btn-outline-danger"
-              onClick={handleDeleteUser}
-              style={{ marginBottom: "0.5em", width: "100%" }}
-              required
-            >
-              Delete my Account
-            </button>
-          </form>
+              <center>
+                <p>
+                  <strong
+                    style={{
+                      color: "red",
+                      marginBottom: "0.5em",
+                    }}
+                  >
+                    {responseMessage}
+                  </strong>
+                </p>
+              </center>
+              <button
+                type="submit"
+                className="btn btn-danger"
+                onClick={handleUpdateUser}
+                style={{ marginBottom: "0.5em", width: "100%" }}
+              >
+                Update Details
+              </button>
+              <button
+                type="submit"
+                className="btn btn-outline-danger"
+                style={{ marginBottom: "0.5em", width: "100%" }}
+                data-bs-toggle="modal"
+                data-bs-target="#deleteModal"
+              >
+                Delete my Account
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="deleteModalLabel">
+                {`Are you sure you want to delete your account with your recipes?`}
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <h2>{userDetails.userName}</h2>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <p>{responseMessage}</p>
+              </div>
+              <div className="modal-buttons">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-dismiss="modal"
+                  onClick={handleDeleteUser}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  data-bs-dismiss="modal"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

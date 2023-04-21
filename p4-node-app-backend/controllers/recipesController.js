@@ -176,7 +176,9 @@ const recipeController = {
       recipe.ingredients = req.body.ingredients || [];
       recipe.instructions = req.body.instructions || [];
       recipe.notes = req.body.notes || "";
-      recipe.image = req.body.image || "";
+      recipe.image =
+        req.body.image ||
+        "https://assets.materialup.com/uploads/b03b23aa-aa69-4657-aa5e-fa5fef2c76e8/preview.png";
       await recipe.save();
 
       // Access user
@@ -199,6 +201,9 @@ const recipeController = {
       const recipeExists = user.recipes.some(
         (recipeId) => recipeId.toString() === req.params.recipeId
       );
+      if (!req.body.name) {
+        return next(new HttpError("Recipe name is required", 400));
+      }
       if (recipeExists) {
         const recipe = await Recipe.findByIdAndUpdate(
           req.params.recipeId,

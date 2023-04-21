@@ -13,7 +13,6 @@ export const UserDetailsProvider = (props) => {
     const fetchUserDetails = async () => {
       if (isLoggedIn) {
         const data = await getUserDetails();
-        console.log(data);
         setUserDetails(data);
       } else {
         setUserDetails([]);
@@ -21,7 +20,7 @@ export const UserDetailsProvider = (props) => {
     };
     fetchUserDetails();
   }, [isLoggedIn]);
-  console.log(userDetails);
+
   return (
     <UserDetailsContext.Provider value={[userDetails, setUserDetails]}>
       {props.children}

@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
-import { UserContext } from "./providers/User";
+import React from "react";
 import imagePlaceholder from "./images/photo.png";
 
 function RecipeButton({ id, image, name, handleDelete, showRecipe }) {
-  const [admin,] = useContext(UserContext);
 
   return (
     <>
       <div className="recipe-card">
         <h4>{name}</h4>
-        {admin ? (
+        {/* {admin ? (
           <>
             <button
               type="button"
@@ -20,7 +18,7 @@ function RecipeButton({ id, image, name, handleDelete, showRecipe }) {
           </>
         ) : (
           ""
-        )}
+        )} */}
         <button className="recipeButton" onClick={() => showRecipe(id)}>
           <img className="recipeButtonImg"
             key={id}

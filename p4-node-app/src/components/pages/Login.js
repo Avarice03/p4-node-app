@@ -41,19 +41,6 @@ function Login() {
         setResponseMessage(error.response.data.message);
       }
     }
-
-    // if (userName) {
-    //   setUserErrMessage("");
-    //   if (password) {
-    //     setPassErrMessage("");
-    //     navigate("/recipes");
-    //     setLoggedIn(true);
-    //   } else {
-    //     setPassErrMessage("Please input password");
-    //   }
-    // } else {
-    //   setUserErrMessage("Please input username");
-    // }
   };
 
   //Function for hiding and showing password

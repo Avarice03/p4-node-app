@@ -3,6 +3,7 @@ const { config } = require("dotenv");
 const jwt = require("jsonwebtoken");
 const HttpError = require("../models/httpError");
 const User = require("../models/userModel");
+const Recipe = require("../models/recipeModel");
 
 config();
 const secret = process.env.SECRET;
@@ -12,7 +13,11 @@ const userController = {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
-      res.json(payload);
+      const user = await User.findById({ _id: payload._id });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
+      res.json(user);
     } catch (error) {
       console.log(error);
       res.status(500).send("Error retrieving user.");
@@ -55,10 +60,20 @@ const userController = {
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
       const dateDeleted = new Date();
+      const user = await User.findById({ _id: payload._id, deletedAt: "" });
+      if (!user) {
+        return next(new HttpError("User does not exist", 404));
+      }
       const userToDelete = await User.findOneAndUpdate(
         { _id: payload._id },
         { deletedAt: dateDeleted }
       );
+      user.recipes.map(async (recipe) => {
+        await Recipe.findOneAndUpdate(
+          { _id: recipe.toString() },
+          { deletedAt: dateDeleted }
+        );
+      });
       if (!userToDelete) {
         return next(new HttpError("User does not exist", 404));
       }

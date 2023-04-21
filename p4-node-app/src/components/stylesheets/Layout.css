@@ -21,6 +21,18 @@ input {
     height: 500px;
 }
 
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
 .layout-container {
     display: grid;
     min-height: 100vh;

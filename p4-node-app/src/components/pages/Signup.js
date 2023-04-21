@@ -67,6 +67,10 @@ function Signup() {
         setUserErrMessage("");
         if (passwordValidation()) {
           setPassErrMessage([]);
+          const firstNameCopy = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+          const lastNameCopy = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+          setFirstName(firstNameCopy);
+          setLastName(lastNameCopy);
           if (confirm === password) {
             const user = {
               firstName: firstName,
