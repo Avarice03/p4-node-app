@@ -39,10 +39,10 @@ router.get("/user/personal", recipeController.getUserRecipes);
 // POST v1/recipes/user
 router.post("/user/", recipeController.addSingleRecipe);
 
-// PUT v1/recipes/:recipeId
+// PUT v1/recipes/user/:recipeId
 router.put("/user/:recipeId", recipeController.updateSingleRecipe);
 
-// DELETE v1/recipes/:recipeId
+// DELETE v1/recipes/user/:recipeId
 router.delete("/user/:recipeId", recipeController.deleteSingleRecipe);
 
 module.exports = router;

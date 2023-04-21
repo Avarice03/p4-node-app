@@ -33,7 +33,7 @@ export const addUser = async (user) => {
 };
 
 export const addRecipe = async (recipe) => {
-  const response = await axios.post(`${BASE_URL}/v1/user`, recipe);
+  const response = await axios.post(`${BASE_URL}/v1/recipes/user`, recipe);
   return response;
 }
 
@@ -43,7 +43,7 @@ export const updateUserDetails = async (userDetails) => {
 };
 
 export const updateRecipe = async (recipeId, recipe) => {
-  const response = await axios.put(`${BASE_URL}/v1/user/${recipeId}`, recipe);
+  const response = await axios.put(`${BASE_URL}/v1/recipes/user/${recipeId}`, recipe);
   return response;
 }
 
@@ -53,7 +53,7 @@ export const deleteUser = async () => {
 }
 
 export const deleteRecipe = async (recipeId) => {
-  const response = await axios.delete(`${BASE_URL}/v1/user/${recipeId}`);
+  const response = await axios.delete(`${BASE_URL}/v1/recipes/user/${recipeId}`);
   return response;
 }
 
