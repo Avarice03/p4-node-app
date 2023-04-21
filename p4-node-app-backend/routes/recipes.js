@@ -29,19 +29,19 @@ router.use("/", (req, res, next) => {
 // // GET v1/recipes/ (Get public and user recipes)
 router.get("/user", recipeController.getPublicAndUserRecipes);
 
-// // GET v1/recipes/user (Get user recipes only)
-// router.get("/user", recipeController.getUserRecipes);
+// // GET v1/recipes/user/personal (Get user recipes only)
+router.get("/user/personal", recipeController.getUserRecipes);
 
 // GET v1/recipes/:recipeId
 router.get("/user/:recipeId", recipeController.getSingleRecipe);
 
-// POST v1/recipes/
+// POST v1/recipes/:recipeId
 router.post("/user/", recipeController.addSingleRecipe);
 
-// PUT v1/recipes/
+// PUT v1/recipes/:recipeId
 router.put("/user/:recipeId", recipeController.updateSingleRecipe);
 
-// DELETE v1/recipes/
+// DELETE v1/recipes/:recipeId
 router.delete("/user/:recipeId", recipeController.deleteSingleRecipe);
 
 module.exports = router;

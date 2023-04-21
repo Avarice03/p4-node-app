@@ -1,12 +1,13 @@
-import React from "react";
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { addUser } from "../services/RecipesService";
+import React, { useContext, useState } from "react";
+import { UserDetailsContext } from "../providers/UserDetailsProvider";
+import { useNavigate } from "react-router-dom";
+import { updateUserDetails } from "../services/RecipesService";
 
-function Signup() {
-  const [userName, setUserName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+function Account() {
+  const [userDetails, setUserDetails] = useContext(UserDetailsContext);
+  const [userName, setUserName] = useState(userDetails.userName);
+  const [firstName, setFirstName] = useState(userDetails.firstName);
+  const [lastName, setLastName] = useState(userDetails.lastName);
   const [password, setPassword] = useState("");
   const [confirm, confirmPass] = useState("");
   const [userErrMessage, setUserErrMessage] = useState("");
@@ -17,7 +18,6 @@ function Signup() {
   const togglePassword = document.querySelector("#togglePassword");
   const navigate = useNavigate();
 
-  //Function for password validation
   const passwordValidation = () => {
     const validations = [
       {
@@ -59,34 +59,32 @@ function Signup() {
       return true;
     }
   };
-
-  // Function for signing in
-  const handleSignup = async () => {
+  const handleUpdateUser = async () => {
     try {
       if (userName) {
         setUserErrMessage("");
         if (passwordValidation()) {
           setPassErrMessage([]);
           if (confirm === password) {
-            const user = {
+            const userDetails = {
               firstName: firstName,
               lastName: lastName,
               userName: userName,
               password: password,
             };
-            const response = await addUser(user);
+            const response = await updateUserDetails(userDetails);
             setResponseMessage(response.data.message);
             alert(
-              `Welcome ${firstName} ${lastName}! You have successfully registered to RecipeEZ.`
+              `Welcome ${firstName} ${lastName}! You have successfully updated your account`
             );
-
+            setUserDetails(userDetails);
             setUserName("");
             setFirstName("");
             setLastName("");
             setPassword("");
             confirmPass("");
             setConfirmErrMessage("");
-            navigate("/login");
+            navigate("/recipes");
           } else {
             setConfirmErrMessage("Your password did not match.");
           }
@@ -99,21 +97,25 @@ function Signup() {
     }
   };
 
-  //Function for hiding and showing password
-  const showPassword = () => {
-    togglePassword.classList.toggle("bi-eye");
-    pass.forEach((pass) => {
-      if (pass.type === "password") {
-        pass.type = "text";
-      } else {
-        pass.type = "password";
-      }
-    });
-  };
+  const handleDeleteUser = () => {};
+
+    //Function for hiding and showing password
+    const showPassword = () => {
+        togglePassword.classList.toggle("bi-eye");
+        pass.forEach((pass) => {
+          if (pass.type === "password") {
+            pass.type = "text";
+          } else {
+            pass.type = "password";
+          }
+        });
+      };
 
   return (
     <div className="signin-container">
-      <h2>Sign up to RecipeEZ</h2>
+      <h1>
+        Hi, {userDetails.firstName} {userDetails.lastName} 👋
+      </h1>
       <div className="login-container">
         <div className="form-container">
           <form onSubmit={(e) => e.preventDefault()}>
@@ -200,24 +202,26 @@ function Signup() {
             <button
               type="submit"
               className="btn btn-danger"
-              onClick={handleSignup}
+              onClick={handleUpdateUser}
               style={{ marginBottom: "0.5em", width: "100%" }}
               required
             >
-              Sign Up
+              Update Details
+            </button>
+            <button
+              type="submit"
+              className="btn btn-outline-danger"
+              onClick={handleDeleteUser}
+              style={{ marginBottom: "0.5em", width: "100%" }}
+              required
+            >
+              Delete my Account
             </button>
           </form>
-        </div>
-      </div>
-      <div className="create-container">
-        <span>Already have an account?</span>
-        <div>
-          <NavLink to="/login">Sign in </NavLink>
-          <span>➡️</span>
         </div>
       </div>
     </div>
   );
 }
 
-export default Signup;
+export default Account;

@@ -12,6 +12,8 @@ import { UserProvider } from "./components/providers/User";
 import RecipePage from "./components/pages/RecipePage";
 import RecipeForm from "./components/pages/RecipeForm";
 import Signup from "./components/pages/Signup";
+import Account from "./components/pages/Account";
+import { UserDetailsProvider } from "./components/providers/UserDetailsProvider";
 
 function App() {
   const router = createBrowserRouter([
@@ -22,11 +24,12 @@ function App() {
         { path: "/", element: <Home /> },
         { path: "recipes", element: <Recipes /> },
         { path: "/recipe/:id", element: <RecipePage /> },
-        { path: "/recipe/:id/edit", element: <RecipeForm />},
-        { path: "/recipe/add", element: <RecipeForm />},
+        { path: "/recipe/:id/edit", element: <RecipeForm /> },
+        { path: "/recipe/add", element: <RecipeForm /> },
         { path: "timer", element: <Timer /> },
         { path: "about-this-app", element: <About /> },
         { path: "contact-me", element: <Contact /> },
+        { path: "account", element: <Account /> },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
       ],
@@ -34,9 +37,11 @@ function App() {
   ]);
   return (
     <UserProvider>
-      <RecipeProvider>
-        <RouterProvider router={router} />
-      </RecipeProvider>
+      <UserDetailsProvider>
+        <RecipeProvider>
+          <RouterProvider router={router} />
+        </RecipeProvider>
+      </UserDetailsProvider>
     </UserProvider>
   );
 }

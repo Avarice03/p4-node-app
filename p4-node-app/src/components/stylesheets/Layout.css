@@ -17,6 +17,10 @@ input {
     padding: 0.5em;
 }
 
+.loading-image {
+    height: 500px;
+}
+
 .layout-container {
     display: grid;
     min-height: 100vh;

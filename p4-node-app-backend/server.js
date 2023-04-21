@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/v1/signup", signupRouter);
 app.use("/v1/login", loginRouter);
 app.use("/v1/admin", adminRouter);
-app.use("/v1/users", userRouter);
+app.use("/v1/user", userRouter);
 app.use("/v1/recipes", recipeRouter);
 
 

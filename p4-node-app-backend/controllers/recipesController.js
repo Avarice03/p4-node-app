@@ -10,7 +10,7 @@ const secret = process.env.SECRET;
 const recipeController = {
   getPublicRecipes: async (req, res) => {
     try {
-      const { category, cuisine} = req.query;
+      const { category, cuisine } = req.query;
       const publicRecipes = await Recipe.find({
         isPublic: true,
         deletedAt: "",
@@ -45,7 +45,7 @@ const recipeController = {
       const { category, cuisine } = req.query;
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
-      const user = await User.findById({ _id: payload._id });
+      const user = await User.findById({ _id: payload._id, deletedAt: "" });
       if (!user) {
         return next(new HttpError("User does not exist", 404));
       }
@@ -82,13 +82,14 @@ const recipeController = {
       res.status(500).send("Error retrieving recipes.");
     }
   },
-  getUserRecipes: async (req, res) => {
+  getUserRecipes: async (req, res, next) => {
     try {
       const { category, cuisine } = req.query;
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
       const userRecipes = await User.findOne({
         _id: payload._id,
+        deletedAt: "",
       }).populate("recipes");
       if (!userRecipes) {
         return next(new HttpError("User does not exist", 404));
@@ -97,21 +98,29 @@ const recipeController = {
         const filteredRecipes = userRecipes.recipes.filter(
           (recipe) =>
             recipe.category.toLowerCase() === category.toLowerCase() &&
-            recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+            recipe.cuisine.toLowerCase() === cuisine.toLowerCase() &&
+            recipe.deletedAt === ""
         );
         res.json(filteredRecipes);
       } else if (category) {
         const filteredRecipes = userRecipes.recipes.filter(
-          (recipe) => recipe.category.toLowerCase() === category.toLowerCase()
+          (recipe) =>
+            recipe.category.toLowerCase() === category.toLowerCase() &&
+            recipe.deletedAt === ""
         );
         res.json(filteredRecipes);
       } else if (cuisine) {
         const filteredRecipes = userRecipes.recipes.filter(
-          (recipe) => recipe.cuisine.toLowerCase() === cuisine.toLowerCase()
+          (recipe) =>
+            recipe.cuisine.toLowerCase() === cuisine.toLowerCase() &&
+            recipe.deletedAt === ""
         );
         res.json(filteredRecipes);
       } else {
-        res.json(userRecipes.recipes);
+        const filteredRecipes = userRecipes.recipes.filter(
+          (recipe) => recipe.deletedAt === ""
+        );
+        res.json(filteredRecipes);
       }
     } catch (error) {
       console.log(error);

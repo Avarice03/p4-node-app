@@ -17,7 +17,7 @@ router.post("/", async (req, res, next) => {
     const user = await User.findOne({ userName: userName, deletedAt: "" });
 
     if (!user) {
-      return next(new HttpError("User does not exist", 404));
+      return next(new HttpError("Incorrect username or password", 401));
     }
     const hasAccess = await bcrypt.compare(passwordInput, user.password);
     const { password, ...payload } = user._doc;
@@ -27,7 +27,7 @@ router.post("/", async (req, res, next) => {
       });
       res.json({ token });
     } else {
-      res.sendStatus(401);
+      return next(new HttpError("Incorrect username or password", 401));
     }
   } catch (error) {
     console.log(error);

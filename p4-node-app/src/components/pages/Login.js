@@ -1,31 +1,71 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import chef from "../images/chef.png";
 import { UserContext } from "../providers/User";
+import { loginUser } from "../services/RecipesService";
+import axios from "axios";
 
 // Login page for RecipeEZ
 function Login() {
-  const [, setAdmin] = useContext(UserContext);
+  const [isLoggedIn, setLoggedIn] = useContext(UserContext);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [userErrMessage, setUserErrMessage] = useState("");
-  const [passErrMessage, setPassErrMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState("");
+  const pass = document.querySelectorAll(".pass");
+  const togglePassword = document.querySelector("#togglePassword");
   const navigate = useNavigate();
 
-  // Function for signing in
-  const handleSignIn = () => {
-    if (userName === "admin") {
-      setUserErrMessage("");
-      if (password === "admin") {
-        setPassErrMessage("");
-        navigate("/recipes");
-        setAdmin(true);
-      } else {
-        setPassErrMessage("Incorrect password");
-      }
-    } else {
-      setUserErrMessage("Invalid username.");
+  useEffect(() => {
+    if (!isLoggedIn) {
+      localStorage.removeItem("token-auth");
     }
+  }, [isLoggedIn]);
+
+  // Function for signing in
+  const handleSignIn = async () => {
+    try {
+      const user = {
+        userName: userName,
+        passwordInput: password,
+      };
+      const response = await loginUser(user);
+      localStorage.setItem("token-auth", response.data.token);
+      setLoggedIn(true);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.data.token}`;
+      navigate("/recipes");
+    } catch (error) {
+      if (error.response.status === 401) {
+        localStorage.removeItem("token-auth");
+        setResponseMessage(error.response.data.message);
+      }
+    }
+
+    // if (userName) {
+    //   setUserErrMessage("");
+    //   if (password) {
+    //     setPassErrMessage("");
+    //     navigate("/recipes");
+    //     setLoggedIn(true);
+    //   } else {
+    //     setPassErrMessage("Please input password");
+    //   }
+    // } else {
+    //   setUserErrMessage("Please input username");
+    // }
+  };
+
+  //Function for hiding and showing password
+  const showPassword = () => {
+    togglePassword.classList.toggle("bi-eye");
+    pass.forEach((pass) => {
+      if (pass.type === "password") {
+        pass.type = "text";
+      } else {
+        pass.type = "password";
+      }
+    });
   };
 
   return (
@@ -41,19 +81,25 @@ function Login() {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               style={{ width: "100%", marginBottom: "0.5em" }}
+              required
             />
-            <small style={{ color: "red", marginBottom: "0.5em" }}>
-              {userErrMessage}
-            </small>
             <p>Password:</p>
             <input
               type="password"
               value={password}
+              className="pass"
               onChange={(e) => setPassword(e.target.value)}
               style={{ width: "100%", marginBottom: "0.5em" }}
+              required
             />
+            <i
+              className="bi bi-eye-slash"
+              id="togglePassword"
+              style={{ marginLeft: "-30px", cursor: "pointer" }}
+              onClick={showPassword}
+            ></i>
             <small style={{ color: "red", marginBottom: "0.5em" }}>
-              {passErrMessage}
+              {responseMessage}
             </small>
             <button
               type="submit"

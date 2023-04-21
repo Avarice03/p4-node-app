@@ -9,37 +9,52 @@ import axios from "axios";
 // Recipes Home page for RecipeEZ
 function Recipes() {
   const [recipes, setRecipes] = useContext(RecipeContext);
-  const [admin] = useContext(UserContext);
+  const [isLoggedIn] = useContext(UserContext);
   const navigate = useNavigate();
   const [recipesCopy, setRecipesCopy] = useState(recipes);
   const [category, setCategory] = useState("");
   const [cuisine, setCuisine] = useState("");
   const [word, searchWord] = useState("");
+  const [personal, setPersonal] = useState(false);
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
 
-  if (categoryQuery === null){
-    categoryQuery = "";
-  }
-  if (cuisineQuery === null){
-    cuisineQuery = "";
-  }
-
   useEffect(() => {
+    setRecipesCopy(recipes);
     const fetch = async () => {
       try {
-        const { data } = await axios.get(
-          `http://localhost:3069/v1/recipes?category=${categoryQuery}&cuisine=${cuisineQuery}`
-        );
-        console.log("data", data);
-        setRecipesCopy(data);
+        if (isLoggedIn) {
+          if (!personal) {
+            const { data } = await axios.get(
+              `http://localhost:3069/v1/recipes/user?category=${categoryQuery}&cuisine=${cuisineQuery}`
+            );
+            setRecipesCopy(data);
+          } else {
+            const { data } = await axios.get(
+              `http://localhost:3069/v1/recipes/user/personal?category=${categoryQuery}&cuisine=${cuisineQuery}`
+            );
+            setRecipesCopy(data);
+          }
+        } else {
+          const { data } = await axios.get(
+            `http://localhost:3069/v1/recipes?category=${categoryQuery}&cuisine=${cuisineQuery}`
+          );
+          setRecipesCopy(data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
     fetch();
-  }, [categoryQuery, cuisineQuery]);
+  }, [categoryQuery, cuisineQuery, isLoggedIn, recipes, personal]);
+
+  if (categoryQuery === null) {
+    categoryQuery = "";
+  }
+  if (cuisineQuery === null) {
+    cuisineQuery = "";
+  }
 
   // Push each category intro  an array
   const categories = recipes.reduce((categories, recipe) => {
@@ -58,29 +73,25 @@ function Recipes() {
   }, []);
 
   // Function for filtering recipes based on category and cuisine
-  const filterCategory = useCallback(
-    (category, cuisine) => {
-      setCategory(category);
-      setCuisine(cuisine);
-
-      // let selectedCategory;
-      // if (category === "All" && cuisine === "All") {
-      //   selectedCategory = recipes;
-      // } else if (category !== "All" && cuisine === "All") {
-      //   selectedCategory = recipes.filter(
-      //     (recipe) => recipe.category === category
-      //   );
-      // } else if (category === "All" && cuisine !== "All") {
-      //   selectedCategory = recipes.filter((recipe) => recipe.cuisine === cuisine);
-      // } else if (category !== "All" && cuisine !== "All") {
-      //   selectedCategory = recipes.filter(
-      //     (recipe) => recipe.category === category && recipe.cuisine === cuisine
-      //   );
-      // }
-      // setRecipesCopy(selectedCategory);
-    },
-    []
-  );
+  const filterCategory = useCallback((category, cuisine) => {
+    setCategory(category);
+    setCuisine(cuisine);
+    // let selectedCategory;
+    // if (category === "All" && cuisine === "All") {
+    //   selectedCategory = recipes;
+    // } else if (category !== "All" && cuisine === "All") {
+    //   selectedCategory = recipes.filter(
+    //     (recipe) => recipe.category === category
+    //   );
+    // } else if (category === "All" && cuisine !== "All") {
+    //   selectedCategory = recipes.filter((recipe) => recipe.cuisine === cuisine);
+    // } else if (category !== "All" && cuisine !== "All") {
+    //   selectedCategory = recipes.filter(
+    //     (recipe) => recipe.category === category && recipe.cuisine === cuisine
+    //   );
+    // }
+    // setRecipesCopy(selectedCategory);
+  }, []);
 
   // Function for removing category tags
   const deleteCategory = () => {
@@ -97,10 +108,12 @@ function Recipes() {
   // Function for searching recipe names
   const handleSearch = (e) => {
     e.preventDefault();
+    filterCategory("", "");
     const searchedWord = recipes.filter((recipe) =>
       recipe.name.toLowerCase().includes(word.toLowerCase())
     );
     setRecipesCopy(searchedWord);
+    searchWord("");
   };
 
   // Function for deleting recipe
@@ -143,7 +156,7 @@ function Recipes() {
           </div>
         </div>
         <div className="add-btn">
-          {admin ? (
+          {isLoggedIn ? (
             <button
               className="btn btn-secondary"
               onClick={() => navigate(`/recipe/add`)}
@@ -173,6 +186,21 @@ function Recipes() {
           </form>
         </div>
       </div>
+      {isLoggedIn ? (
+        <div>
+          <input
+            type="checkbox"
+            className="btn-check"
+            id="btncheck"
+            onClick={() => setPersonal(!personal)}
+          ></input>
+          <label className="btn btn-outline-danger" htmlFor="btncheck">
+            Show Personal Recipes
+          </label>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="filters-container">
         {category === "" ? (
           ""

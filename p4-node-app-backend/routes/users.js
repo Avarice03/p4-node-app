@@ -24,13 +24,13 @@ router.use("/", (req, res, next) => {
   }
 });
 
-// GET v1/users/ (Get user details)
+// GET v1/user/ (Get user details)
 router.get("/", userController.getSingleUser);
 
-// PUT v1/users/ (Update user details)
+// PUT v1/user/ (Update user details)
 router.put("/", userController.updateSingleUser);
 
-// DELETE v1/users/ (Soft Delete user)
+// DELETE v1/user/ (Soft Delete user)
 router.delete("/", userController.deleteSingleUser);
 
 module.exports = router;

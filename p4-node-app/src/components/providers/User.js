@@ -4,10 +4,10 @@ export const UserContext = createContext();
 
 // Provider for admin user status
 export const UserProvider = (props) => {
-  const [admin, setAdmin] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   return (
-    <UserContext.Provider value={[admin, setAdmin]}>
+    <UserContext.Provider value={[isLoggedIn, setLoggedIn]}>
       {props.children}
     </UserContext.Provider>
   );

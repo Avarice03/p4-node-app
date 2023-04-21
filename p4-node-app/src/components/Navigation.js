@@ -5,7 +5,7 @@ import { UserContext } from "./providers/User";
 
 // Navigation for RecipeEZ
 function Navigation() {
-  const [admin, setAdmin] = useContext(UserContext);
+  const [isLoggedIn, setLoggedIn] = useContext(UserContext);
 
   return (
     <div className="header">
@@ -60,15 +60,29 @@ function Navigation() {
                   About
                 </NavLink>
               </li>
+              {isLoggedIn ? (
+                <li className="nav-item ">
+                  <NavLink to="/account" className="nav-link">
+                    Account
+                  </NavLink>
+                </li>
+              ) : (
+                ""
+              )}
               <div className="signin-form">
                 <li className="nav-item">
-                  {admin ? (
+                  {isLoggedIn ? (
                     <button
                       className="login-btn btn rounded-pill btn-danger"
                       style={{ textDecoration: "none", color: "white" }}
-                      onClick={() => setAdmin(false)}
+                      onClick={() => setLoggedIn(false)}
                     >
-                      Logout
+                      <NavLink
+                        to="/login"
+                        style={{ textDecoration: "none", color: "white" }}
+                      >
+                        Logout
+                      </NavLink>
                     </button>
                   ) : (
                     <button className="login-btn btn rounded-pill btn-danger">

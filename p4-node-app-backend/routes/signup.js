@@ -11,7 +11,7 @@ router.post("/", async (req, res, next) => {
     const user = new User(req.body);
     const userExists = await User.find({ userName: user.userName });
     if (userExists.length) {
-      return next(new HttpError("Sorry, username alreaady exists", 400));
+      return next(new HttpError("Sorry, username is already taken", 400));
     }
     const salt = await bcrypt.genSalt(3);
     const passwordHash = await bcrypt.hash(user.password, salt);

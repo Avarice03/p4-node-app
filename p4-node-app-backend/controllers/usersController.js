@@ -23,6 +23,13 @@ const userController = {
       const token = req.headers.authorization.split(" ")[1];
       const payload = jwt.verify(token, secret);
       const salt = await bcrypt.genSalt(3);
+      const userExists = await User.find({
+        _id: { $ne: payload._id },
+        userName: req.body.userName,
+      });
+      if (userExists.length) {
+        return next(new HttpError("Sorry, username is already taken", 400));
+      }
       const user = await User.findOneAndUpdate(
         {
           _id: payload._id,
