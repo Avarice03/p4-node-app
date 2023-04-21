@@ -8,21 +8,20 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 
 ### Endpoints
 
-|  #  | Action |           URL            | HTTP Verb |  CRUD  |                                           Description                                           |
-| :-: | :----: | :----------------------: | :-------: | :----: | :---------------------------------------------------------------------------------------------: |
-|  1  | Create |   /api/v1/users/signup   |   POST    | Create |                                        Create a new user                                        |
-|  2  | Create |  /api/v1/recipe/:userId  |   POST    | Create |                                       Create a new recipe                                       |
-|  3  |  Read  |      /api/v1/recipe      |    GET    |  Read  |                                  Gets the list of all recipes                                   |
-|  4  |  Read  | /api/v1/recipe/:recipeId |    GET    |  Read  |                                     Gets a specific recipe                                      |
-|  5  |  Read  |  /api/v1/recipe/public   |    GET    |  Read  |                                 Gets the list of public recipes                                 |
-|  7  |  Read  |     /api/v1/recipe?      |    GET    |  Read  | User can add a query parameter that will return the recipes that matches the cuisine & category |
-|  8  |  Read  |      /api/v1/users       |    GET    |  Read  |                                     Gets the list of users                                      |
-|  9  |  Read  |  /api/v1/users/:userId   |    GET    |  Read  |                                      Gets a specific user                                       |
-| 10  |  Read  |  /api/v1/users/recipes   |    GET    |  Read  |                           Gets the list of recipes of a specific user                           |
-| 11  | Update | /api/v1/recipe/:recipeId |    PUT    | Update |                         Updates details of a recipe with the given id.                          |
-| 12  | Update |  /api/v1/users/:userId   |    PUT    | Update |                          Updates details of a user with the given id.                           |
-| 13  | Delete | /api/v1/recipe/:recipeId |  DELETE   | Delete |                    Soft deletes the recipe with the given id from the list.                     |
-| 14  | Delete |  /api/v1/users/:userId   |  DELETE   | Delete |                     Soft deletes the user with the given id from the list.                      |
+|  #  | Action |              URL               | HTTP Verb |  CRUD  |                                           Description                                           |
+| :-: | :----: | :----------------------------: | :-------: | :----: | :---------------------------------------------------------------------------------------------: |
+|  1  | Create |         /api/v1/signup         |   POST    | Create |                                        Create a new user                                        |
+|  2  | Create |         /api/v1/login          |   POST    | Create |                                    Create user session token                                    |
+|  3  | Create |      /api/v1/recipes/user      |   POST    | Create |                                  User can create a new recipe                                   |
+|  4  |  Read  |          /api/v1/user          |    GET    |  Read  |                                    Gets the details of user                                     |
+|  5  |  Read  |        /api/v1/recipes         |    GET    |  Read  |                                 Gets the list of public recipes                                 |
+|  6  |  Read  |      /api/v1/recipes/user      |    GET    |  Read  |                            Gets the list of public and user recipes                             |
+|  7  |  Read  |    /api/v1/recipes/personal    |    GET    |  Read  |                               Gets the list of user recipes only                                |
+|  8  |  Read  |        /api/v1/recipes?        |    GET    |  Read  | User can add a query parameter that will return the recipes that matches the cuisine & category |
+|  9  | Update |          /api/v1/user          |    PUT    | Update |                              User can update their account details                              |
+| 10  | Update | /api/v1/recipes/user/:recipeId |    PUT    | Update |                             User can update the details of a recipe                             |
+| 11  | Delete |          /api/v1/user          |  DELETE   | Delete |                               User can soft delete their account                                |
+| 12  | Delete | /api/v1/recipes/user/:recipeId |  DELETE   | Delete |                           User can soft delete their selected recipe                            |
 
 ## User Stories
 
@@ -41,7 +40,6 @@ The RecipeEz (Recipe made Easy) app is a digital cookbook that offers a wide ran
 - I can view the list of recipes
 - I can view the list of recipes by cuisine
 - I can view the list of recipes by category
-- I can search the list of recipes by name
 
 ### As a developer, I can update data from MongoDB.
 

@@ -7,6 +7,7 @@ config();
 const secret = process.env.SECRET;
 const recipeController = require("../controllers/recipesController");
 
+// GET v1/recipes/ (Get public recipes)
 router.get("/", recipeController.getPublicRecipes);
 
 router.use("/", (req, res, next) => {
@@ -26,16 +27,16 @@ router.use("/", (req, res, next) => {
 });
 
 
-// // GET v1/recipes/ (Get public and user recipes)
+// GET v1/recipes/user (Get public and user recipes)
 router.get("/user", recipeController.getPublicAndUserRecipes);
 
-// // GET v1/recipes/user/personal (Get user recipes only)
+// GET v1/recipes/user/personal (Get user recipes only)
 router.get("/user/personal", recipeController.getUserRecipes);
 
 // GET v1/recipes/:recipeId
-router.get("/user/:recipeId", recipeController.getSingleRecipe);
+// router.get("/user/:recipeId", recipeController.getSingleRecipe);
 
-// POST v1/recipes/:recipeId
+// POST v1/recipes/user
 router.post("/user/", recipeController.addSingleRecipe);
 
 // PUT v1/recipes/:recipeId
