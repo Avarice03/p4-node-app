@@ -20,7 +20,7 @@ function Recipes() {
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
   const BASE_URL = "https://recipeez-api.onrender.com";
-  const token = localStorage.getItem("token-auth");
+  // const token = localStorage.getItem("token-auth");
 
   useEffect(() => {
     const fetch = async () => {

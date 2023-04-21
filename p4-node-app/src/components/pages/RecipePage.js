@@ -33,9 +33,9 @@ function RecipePage() {
         console.log(error);
         setResponseMessage(error.response.data.message);
       }
-      fetch();
     };
-  }, [recipe]);
+    fetch();
+  }, [recipe, id]);
   // Function for deleting recipes
   const handleDelete = async () => {
     try {
