@@ -59,9 +59,13 @@ function RecipePage() {
                 })}
               </ul>
             </div>
-            <div className="recipe-notes">
-              <h2>Notes:</h2>
-              <p>{recipe.notes}</p>
+            <div className="recipe-instructions">
+              <h2>Instructions:</h2>
+              <ol>
+                {recipe.instructions.map((instructions) => {
+                  return <li>{instructions}</li>;
+                })}
+              </ol>
             </div>
           </div>
           <div className="right-column">
@@ -106,13 +110,9 @@ function RecipePage() {
                 alt="placeholder"
               />
             </div>
-            <div className="recipe-instructions">
-              <h2>Instructions:</h2>
-              <ol>
-                {recipe.instructions.map((instructions) => {
-                  return <li>{instructions}</li>;
-                })}
-              </ol>
+            <div className="recipe-notes">
+              <h2>Notes:</h2>
+              <p>{recipe.notes}</p>
             </div>
           </div>
         </div>

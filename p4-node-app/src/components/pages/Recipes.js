@@ -22,7 +22,6 @@ function Recipes() {
   const BASE_URL = "https://recipeez-api.onrender.com";
 
   useEffect(() => {
-    setRecipesCopy(recipes);
     const fetch = async () => {
       try {
         if (isLoggedIn) {

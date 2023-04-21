@@ -30,10 +30,10 @@ function RecipeForm() {
   // Join each ingredient and instruction array item into a single string separated with a slash (/) to display in their textarea
   // Note: used slash instead of comma since some ingredients and instructions use comma
   const [ingredientsCopy, setIngredientsCopy] = useState(
-    editedRecipe?.ingredients.join("/") || ""
+    editedRecipe?.ingredients.join("//") || ""
   );
   const [instructionsCopy, setInstructionsCopy] = useState(
-    editedRecipe?.instructions.join("/") || ""
+    editedRecipe?.instructions.join("//") || ""
   );
   const [isPublic, setIsPublic] = useState(false);
   const [, setUserDetails] = useContext(UserDetailsContext);
@@ -76,8 +76,8 @@ function RecipeForm() {
   };
 
   // Function to split the ingredients and instructions separated by a slash into an array
-  const ingredients = ingredientsCopy.split("/");
-  const instructions = instructionsCopy.split("/");
+  const ingredients = ingredientsCopy.split("//");
+  const instructions = instructionsCopy.split("//");
 
   // Function for saving changes and adding the edited or added item to the recipes array
   const saveChanges = async (newRecipe) => {
@@ -169,6 +169,7 @@ function RecipeForm() {
           <label className="form-label">Recipe Name</label>
           <input
             name="name"
+            maxlength="20"
             className="form-control"
             placeholder="Recipe Name"
             type="text"
@@ -234,24 +235,24 @@ function RecipeForm() {
             name="ingredients"
             className="form-control"
             rows="3"
-            placeholder="Ingredients separated by slash ( / )"
+            placeholder="Ingredients separated by double slash ( // )"
             value={ingredientsCopy}
             onChange={handleChange}
           ></textarea>
           <p className="text-muted">
-            Please separate each ingredient by a slash ("/").
+            Please separate each ingredient by a double slash ("//").
           </p>
           <label className="form-label">Instructions:</label>
           <textarea
             name="instructions"
             className="form-control"
             rows="3"
-            placeholder="Instructions separated by slash ( / )"
+            placeholder="Instructions separated by double slash ( // )"
             value={instructionsCopy}
             onChange={handleChange}
           ></textarea>
           <p className="text-muted">
-            Please separate each instruction by a slash ("/").
+            Please separate each instruction by a double slash ("//").
           </p>
         </div>
         <div>
