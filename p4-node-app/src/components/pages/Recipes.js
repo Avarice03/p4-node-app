@@ -19,6 +19,7 @@ function Recipes() {
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
+  const BASE_URL = "https://recipeez-api.onrender.com";
 
   useEffect(() => {
     setRecipesCopy(recipes);
@@ -27,18 +28,18 @@ function Recipes() {
         if (isLoggedIn) {
           if (!personal) {
             const { data } = await axios.get(
-              `http://localhost:3069/v1/recipes/user?category=${categoryQuery}&cuisine=${cuisineQuery}`
+              `${BASE_URL}/v1/recipes/user?category=${categoryQuery}&cuisine=${cuisineQuery}`
             );
             setRecipesCopy(data);
           } else {
             const { data } = await axios.get(
-              `http://localhost:3069/v1/recipes/user/personal?category=${categoryQuery}&cuisine=${cuisineQuery}`
+              `${BASE_URL}/v1/recipes/user/personal?category=${categoryQuery}&cuisine=${cuisineQuery}`
             );
             setRecipesCopy(data);
           }
         } else {
           const { data } = await axios.get(
-            `http://localhost:3069/v1/recipes?category=${categoryQuery}&cuisine=${cuisineQuery}`
+            `${BASE_URL}/v1/recipes?category=${categoryQuery}&cuisine=${cuisineQuery}`
           );
           setRecipesCopy(data);
         }
