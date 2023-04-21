@@ -127,29 +127,40 @@ const recipeController = {
       res.status(500).send("Error retrieving user recipes.");
     }
   },
-  // getSingleRecipe: async (req, res, next) => {
-  //   try {
-  //     const token = req.headers.authorization.split(" ")[1];
-  //     const payload = jwt.verify(token, secret);
-  //     const user = await User.findById({ _id: payload._id });
-  //     if (!user) {
-  //       return next(new HttpError("User does not exist", 404));
-  //     }
-  //     const recipe = await Recipe.findOne({
-  //       _id: req.params.recipeId,
-  //       deletedAt: "",
-  //     });
-  //     const recipeExists = user.recipes.includes(req.params.recipeId);
-  //     if (recipeExists || recipe.isPublic) {
-  //       res.json(recipe);
-  //     } else {
-  //       return next(new HttpError("Recipe does not exist", 404));
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).send("Error retrieving recipe.");
-  //   }
-  // },
+  getSingleRecipe: async (req, res, next) => {
+    try {
+      const token = req.headers.authorization
+        ? req.headers.authorization.split(" ")[1]
+        : "";
+      if (token.length) {
+        const payload = jwt.verify(token, secret);
+        const user = await User.findById({ _id: payload._id });
+        if (!user) {
+          return next(new HttpError("User does not exist", 404));
+        }
+        const recipe = await Recipe.findOne({
+          _id: req.params.recipeId,
+          deletedAt: "",
+        });
+        const recipeExists = user.recipes.includes(req.params.recipeId);
+        if (recipeExists || recipe.isPublic) {
+          res.json(recipe);
+        } else {
+          return next(new HttpError("Recipe does not exist", 404));
+        }
+      } else {
+        const recipe = await Recipe.findOne({
+          _id: req.params.recipeId,
+          deletedAt: "",
+          isPublic: true,
+        });
+        res.json(recipe);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error retrieving recipe.");
+    }
+  },
   addSingleRecipe: async (req, res, next) => {
     try {
       const token = req.headers.authorization.split(" ")[1];

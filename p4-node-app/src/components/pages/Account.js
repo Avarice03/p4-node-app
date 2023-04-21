@@ -1,13 +1,17 @@
 import React, { useContext, useState } from "react";
 import { UserDetailsContext } from "../providers/UserDetailsProvider";
 import { useNavigate } from "react-router-dom";
-import { deleteUser, getPublicRecipes, updateUserDetails } from "../services/RecipesService";
+import {
+  deleteUser,
+  getPublicRecipes,
+  updateUserDetails,
+} from "../services/RecipesService";
 import { UserContext } from "../providers/User";
 import { RecipeContext } from "../providers/RecipeProvider";
 
 function Account() {
   const [userDetails, setUserDetails] = useContext(UserDetailsContext);
-  const [,setRecipes] = useContext(RecipeContext);
+  const [, setRecipes] = useContext(RecipeContext);
   const [userName, setUserName] = useState(userDetails.userName);
   const [firstName, setFirstName] = useState(userDetails.firstName);
   const [lastName, setLastName] = useState(userDetails.lastName);
@@ -244,36 +248,36 @@ function Account() {
         </div>
       </div>
       <div
-        class="modal fade"
+        className="modal fade"
         id="deleteModal"
         tabindex="-1"
         aria-labelledby="deleteModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="deleteModalLabel">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="deleteModalLabel">
                 {`Are you sure you want to delete your account with your recipes?`}
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <h2>{userDetails.userName}</h2>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <div>
                 <p>{responseMessage}</p>
               </div>
               <div className="modal-buttons">
                 <button
                   type="button"
-                  class="btn btn-danger"
+                  className="btn btn-danger"
                   data-bs-dismiss="modal"
                   onClick={handleDeleteUser}
                 >
@@ -281,7 +285,7 @@ function Account() {
                 </button>
                 <button
                   type="button"
-                  class="btn btn-outline-danger"
+                  className="btn btn-outline-danger"
                   data-bs-dismiss="modal"
                 >
                   No

@@ -23,7 +23,7 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "recipes", element: <Recipes /> },
-        { path: "/recipe/:id", element: <RecipePage /> },
+        { path: "recipe/:id", element: <RecipePage /> },
         { path: "/recipe/:id/edit-recipe", element: <RecipeForm /> },
         { path: "/recipe/add-recipe", element: <RecipeForm /> },
         { path: "timer", element: <Timer /> },

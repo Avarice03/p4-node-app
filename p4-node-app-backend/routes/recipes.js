@@ -10,6 +10,9 @@ const recipeController = require("../controllers/recipesController");
 // GET v1/recipes/ (Get public recipes)
 router.get("/", recipeController.getPublicRecipes);
 
+// GET v1/recipes/:recipeId
+router.get("/:recipeId", recipeController.getSingleRecipe);
+
 router.use("/", (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
@@ -32,9 +35,6 @@ router.get("/user", recipeController.getPublicAndUserRecipes);
 
 // GET v1/recipes/user/personal (Get user recipes only)
 router.get("/user/personal", recipeController.getUserRecipes);
-
-// GET v1/recipes/:recipeId
-// router.get("/user/:recipeId", recipeController.getSingleRecipe);
 
 // POST v1/recipes/user
 router.post("/user/", recipeController.addSingleRecipe);

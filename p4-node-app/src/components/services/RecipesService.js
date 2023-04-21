@@ -17,6 +17,11 @@ export const getUserRecipes = async () => {
   return data;
 };
 
+export const getRecipe = async (recipeId) => {
+  const { data } = await axios.get(`${BASE_URL}/v1/recipes/${recipeId}`);
+  return data;
+};
+
 export const getUserDetails = async () => {
   const { data } = await axios.get(`${BASE_URL}/v1/user`);
   return data;

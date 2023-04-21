@@ -75,7 +75,10 @@ function Navigation() {
                     <button
                       className="login-btn btn rounded-pill btn-danger"
                       style={{ textDecoration: "none", color: "white" }}
-                      onClick={() => setLoggedIn(false)}
+                      onClick={() => {
+                        localStorage.removeItem("token-auth");
+                        setLoggedIn(false);
+                      }}
                     >
                       <NavLink
                         to="/login"

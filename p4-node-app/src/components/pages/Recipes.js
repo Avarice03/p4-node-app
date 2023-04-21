@@ -2,14 +2,14 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FilterCategory from "../FilterCategory";
 import { RecipeContext } from "../providers/RecipeProvider";
-import { UserContext } from "../providers/User";
 import RecipeButton from "../RecipeButton";
 import axios from "axios";
+import { UserContext } from "../providers/User";
 
 // Recipes Home page for RecipeEZ
 function Recipes() {
-  const [recipes, ] = useContext(RecipeContext);
-  const [isLoggedIn,] = useContext(UserContext);
+  const [recipes] = useContext(RecipeContext);
+  const [isLoggedIn] = useContext(UserContext);
   const navigate = useNavigate();
   const [recipesCopy, setRecipesCopy] = useState(recipes);
   const [category, setCategory] = useState("");
@@ -20,6 +20,7 @@ function Recipes() {
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
   const BASE_URL = "https://recipeez-api.onrender.com";
+  const token = localStorage.getItem("token-auth");
 
   useEffect(() => {
     const fetch = async () => {
@@ -113,23 +114,6 @@ function Recipes() {
       recipe.name.toLowerCase().includes(word.toLowerCase())
     );
     setRecipesCopy(searchedWord);
-    searchWord("");
-  };
-
-  // // Function for deleting recipe
-  // const handleDelete = (id) => {
-  //   const currentRecipes = recipesCopy;
-  //   const remainingRecipes = recipes.filter((recipe) => recipe.id !== id);
-  //   const remainingCurrentRecipes = currentRecipes.filter(
-  //     (recipe) => recipe.id !== id
-  //   );
-  //   setRecipes(remainingRecipes);
-  //   setRecipesCopy(remainingCurrentRecipes);
-  // };
-
-  // Function for navigating to the recipe page of recipe clicked
-  const showRecipe = (id) => {
-    navigate(`/recipe/${id}`);
   };
 
   return (
@@ -234,8 +218,6 @@ function Recipes() {
             id={recipe._id}
             name={recipe.name}
             image={recipe.image}
-            // handleDelete={handleDelete}
-            showRecipe={showRecipe}
           />
         ))}
       </div>
