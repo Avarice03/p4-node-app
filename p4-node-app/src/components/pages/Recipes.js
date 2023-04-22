@@ -20,8 +20,8 @@ function Recipes() {
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
-  // const BASE_URL = "https://recipeez-api.onrender.com";
-  const BASE_URL = "http://localhost:3069";
+  const BASE_URL = "https://recipeez-api.onrender.com";
+  // const BASE_URL = "http://localhost:3069";
   // const token = localStorage.getItem("token-auth");
   // console.log(isLoggedIn);
   useEffect(() => {
