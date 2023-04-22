@@ -1,25 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import chef from "../images/chef.png";
 import { UserContext } from "../providers/User";
-import { loginUser } from "../services/RecipesService";
+import { getUserDetails, loginUser } from "../services/RecipesService";
 import axios from "axios";
+import { UserDetailsContext } from "../providers/UserDetailsProvider";
 
 // Login page for RecipeEZ
 function Login() {
-  const [isLoggedIn, setLoggedIn] = useContext(UserContext);
+  const [, setUserDetails] = useContext(UserDetailsContext);
+  const [, setLoggedIn] = useContext(UserContext);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [responseMessage, setResponseMessage] = useState("");
   const pass = document.querySelectorAll(".pass");
   const togglePassword = document.querySelector("#togglePassword");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      localStorage.removeItem("token-auth");
-    }
-  }, [isLoggedIn]);
 
   // Function for signing in
   const handleSignIn = async () => {
@@ -30,10 +26,12 @@ function Login() {
       };
       const response = await loginUser(user);
       localStorage.setItem("token-auth", response.data.token);
-      setLoggedIn(true);
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${response.data.token}`;
+      setLoggedIn(localStorage.getItem("token-auth"));
+      const data = await getUserDetails();
+      setUserDetails(data);
       navigate("/recipes");
     } catch (error) {
       if (error.response.status === 401) {

@@ -1,19 +1,15 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
 
 // Provider for admin user status
 export const UserProvider = (props) => {
-  const token = localStorage.getItem("token-auth");
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState();
+  const tokenExists = localStorage.getItem("token-auth");
 
-  useCallback(() => {
-    if (token){
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  }, [token])
+  useEffect(() => {
+    setLoggedIn(tokenExists);
+  }, [tokenExists]);
 
   return (
     <UserContext.Provider value={[isLoggedIn, setLoggedIn]}>
@@ -22,6 +18,6 @@ export const UserProvider = (props) => {
   );
 };
 
-const userExport = { UserContext, UserProvider }
+const userExport = { UserContext, UserProvider };
 
 export default userExport;

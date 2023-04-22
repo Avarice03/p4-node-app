@@ -5,6 +5,8 @@ import backImg from "../images/back.png";
 import { UserContext } from "../providers/User";
 import imagePlaceholder from "../images/photo.png";
 import { UserDetailsContext } from "../providers/UserDetailsProvider";
+import axios from "axios";
+import spinner from "../images/loading.gif";
 import {
   deleteRecipe,
   getPublicAndUserRecipes,
@@ -15,17 +17,22 @@ import {
 function RecipePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [recipes, setRecipes] = useContext(RecipeContext);
+  const [, setRecipes] = useContext(RecipeContext);
   const [isLoggedIn] = useContext(UserContext);
-  const recipeSelected = recipes.find((recipe) => recipe._id === id);
-  const [recipe, setRecipe] = useState(recipeSelected);
-  // Data of the recipe clicked based on its id
+  // const recipe = recipes.find((recipe) => recipe._id == id);
+  const [recipe, setRecipe] = useState();
   const [userDetails] = useContext(UserDetailsContext);
   const [responseMessage, setResponseMessage] = useState("");
+  const tokenExists = localStorage.getItem("token-auth");
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        if (tokenExists) {
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${tokenExists}`;
+        }
         const data = await getRecipe(id);
         setRecipe(data);
         setResponseMessage(data.message);
@@ -35,7 +42,8 @@ function RecipePage() {
       }
     };
     fetch();
-  }, [recipe, id]);
+  }, [id, tokenExists]);
+
   // Function for deleting recipes
   const handleDelete = async () => {
     try {
@@ -50,25 +58,37 @@ function RecipePage() {
     }
   };
 
+  if (!recipe) {
+    return (
+      <img src={spinner} className="loading-image" alt="cooking cat gif" />
+    );
+  }
+
+  if (isLoggedIn && !userDetails) {
+    return (
+      <img src={spinner} className="loading-image" alt="cooking cat gif" />
+    );
+  }
+
   return (
     <>
       <div className="recipePage-container">
         <div className="column-containers">
           <div className="left-column">
-            <h1>{recipe.name || ""}</h1>
+            <h1>{recipe.name}</h1>
             <div className="recipe-content">
               <p className="badge rounded-pill text-bg-danger">
-                {recipe.category || ""}
+                {recipe.category}
               </p>
-              <p>Servings: {recipe.servings || ""}</p>
-              <p>Cuisine: {recipe.cuisine || ""}</p>
-              <p>{recipe.description || ""}</p>
+              <p>Servings: {recipe.servings}</p>
+              <p>Cuisine: {recipe.cuisine}</p>
+              <p>{recipe.description}</p>
             </div>
             <div className="recipe-ingredients">
               <h2>Ingredients:</h2>
               <ul>
                 {recipe.ingredients.map((ingredients) => {
-                  return <li key={ingredients}>{ingredients || ""}</li>;
+                  return <li key={ingredients}>{ingredients}</li>;
                 })}
               </ul>
             </div>
@@ -76,7 +96,7 @@ function RecipePage() {
               <h2>Instructions:</h2>
               <ol>
                 {recipe.instructions.map((instructions) => {
-                  return <li key={instructions}>{instructions || ""}</li>;
+                  return <li key={instructions}>{instructions}</li>;
                 })}
               </ol>
             </div>
@@ -125,7 +145,7 @@ function RecipePage() {
             </div>
             <div className="recipe-notes">
               <h2>Notes:</h2>
-              <p>{recipe.notes || ""}</p>
+              <p>{recipe.notes}</p>
             </div>
           </div>
         </div>

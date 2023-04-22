@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "https://recipeez-api.onrender.com";
+// const BASE_URL = "https://recipeez-api.onrender.com";
+const BASE_URL = "http://localhost:3069";
 
 export const getPublicRecipes = async () => {
   const { data } = await axios.get(`${BASE_URL}/v1/recipes`);

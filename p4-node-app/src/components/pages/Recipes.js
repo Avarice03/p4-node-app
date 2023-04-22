@@ -5,6 +5,7 @@ import { RecipeContext } from "../providers/RecipeProvider";
 import RecipeButton from "../RecipeButton";
 import axios from "axios";
 import { UserContext } from "../providers/User";
+import spinner from "../images/loading.gif";
 
 // Recipes Home page for RecipeEZ
 function Recipes() {
@@ -19,9 +20,10 @@ function Recipes() {
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
-  const BASE_URL = "https://recipeez-api.onrender.com";
+  // const BASE_URL = "https://recipeez-api.onrender.com";
+  const BASE_URL = "http://localhost:3069";
   // const token = localStorage.getItem("token-auth");
-
+  // console.log(isLoggedIn);
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -115,6 +117,12 @@ function Recipes() {
     );
     setRecipesCopy(searchedWord);
   };
+
+  if (!recipes) {
+    return (
+      <img src={spinner} className="loading-image" alt="cooking cat gif" />
+    );
+  }
 
   return (
     <div className="recipes-container">

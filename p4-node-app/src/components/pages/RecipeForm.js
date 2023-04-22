@@ -169,13 +169,16 @@ function RecipeForm() {
           <label className="form-label">Recipe Name</label>
           <input
             name="name"
-            maxlength="20"
+            maxLength="20"
             className="form-control"
             placeholder="Recipe Name"
             type="text"
             value={name}
             onChange={handleChange}
           />
+           <p className="text-muted">
+            Maximum length of 20 characters.
+          </p>
           <label className="form-label">Category:</label>
           <input
             name="category"

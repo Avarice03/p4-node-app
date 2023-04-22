@@ -12,9 +12,9 @@ import { RecipeContext } from "../providers/RecipeProvider";
 function Account() {
   const [userDetails, setUserDetails] = useContext(UserDetailsContext);
   const [, setRecipes] = useContext(RecipeContext);
-  const [userName, setUserName] = useState(userDetails.userName);
-  const [firstName, setFirstName] = useState(userDetails.firstName);
-  const [lastName, setLastName] = useState(userDetails.lastName);
+  const [userName, setUserName] = useState(userDetails?.userName || "" );
+  const [firstName, setFirstName] = useState(userDetails?.firstName || "");
+  const [lastName, setLastName] = useState(userDetails?.lastName || "");
   const [password, setPassword] = useState("");
   const [confirm, confirmPass] = useState("");
   const [userErrMessage, setUserErrMessage] = useState("");
@@ -141,7 +141,7 @@ function Account() {
     <>
       <div className="signin-container">
         <h1>
-          Hi, {userDetails.firstName} {userDetails.lastName} 👋
+          Hi, {userDetails?.firstName || ""} {userDetails?.lastName || ""} 👋
         </h1>
         <div className="login-container">
           <div className="form-container">
@@ -250,7 +250,7 @@ function Account() {
       <div
         className="modal fade"
         id="deleteModal"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="deleteModalLabel"
         aria-hidden="true"
       >
@@ -268,7 +268,7 @@ function Account() {
               ></button>
             </div>
             <div className="modal-body">
-              <h2>{userDetails.userName}</h2>
+              <h2>{userDetails?.userName || ""}</h2>
             </div>
             <div className="modal-footer">
               <div>

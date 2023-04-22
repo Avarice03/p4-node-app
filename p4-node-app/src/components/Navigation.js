@@ -77,7 +77,7 @@ function Navigation() {
                       style={{ textDecoration: "none", color: "white" }}
                       onClick={() => {
                         localStorage.removeItem("token-auth");
-                        setLoggedIn(false);
+                        setLoggedIn();
                       }}
                     >
                       <NavLink
@@ -92,6 +92,9 @@ function Navigation() {
                       <NavLink
                         to="/login"
                         style={{ textDecoration: "none", color: "white" }}
+                        onClick={() => {
+                          localStorage.removeItem("token-auth");
+                        }}
                       >
                         Sign In
                       </NavLink>

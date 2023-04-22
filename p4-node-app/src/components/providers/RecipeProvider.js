@@ -4,6 +4,7 @@ import {
   getPublicRecipes,
 } from "../services/RecipesService";
 import { UserContext } from "./User";
+import axios from "axios";
 
 export const RecipeContext = createContext();
 
@@ -11,10 +12,14 @@ export const RecipeContext = createContext();
 export const RecipeProvider = (props) => {
   const [isLoggedIn] = useContext(UserContext);
   const [recipes, setRecipes] = useState([]);
+  const tokenExists = localStorage.getItem("token-auth");
 
   useEffect(() => {
     const fetchRecipes = async () => {
       if (isLoggedIn) {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${tokenExists}`;
         const data = await getPublicAndUserRecipes();
         setRecipes(data);
       } else {
@@ -23,7 +28,7 @@ export const RecipeProvider = (props) => {
       }
     };
     fetchRecipes();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, tokenExists]);
 
   return (
     <RecipeContext.Provider value={[recipes, setRecipes]}>
