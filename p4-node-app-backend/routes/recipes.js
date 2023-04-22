@@ -11,7 +11,7 @@ const recipeController = require("../controllers/recipesController");
 router.get("/", recipeController.getPublicRecipes);
 
 // GET v1/recipes/:recipeId
-router.get("/:recipeId", recipeController.getSingleRecipe);
+router.get("/recipe/:recipeId", recipeController.getSingleRecipe);
 
 router.use("/", (req, res, next) => {
   try {
