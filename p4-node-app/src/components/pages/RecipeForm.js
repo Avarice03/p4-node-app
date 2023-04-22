@@ -176,27 +176,48 @@ function RecipeForm() {
             value={name}
             onChange={handleChange}
           />
-           <p className="text-muted">
-            Maximum length of 20 characters.
-          </p>
+          <p className="text-muted">Maximum length of 20 characters.</p>
           <label className="form-label">Category:</label>
-          <input
+          <select
+            className="select-category"
             name="category"
-            className="form-control"
-            placeholder="Category"
-            type="text"
             value={category}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select Category</option>
+            <option value="Pork">Pork</option>
+            <option value="Chicken">Chicken</option>
+            <option value="Beef">Beef</option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Seafood">Seafood</option>
+            <option value="Pasta">Pasta</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Fruits">Fruits</option>
+            <option value="Others">Others</option>
+          </select>
           <label className="form-label">Servings:</label>
-          <input
-            name="servings"
-            className="form-control"
-            placeholder="Servings"
-            type="number"
-            value={servings}
+          <select
+            className="select-cuisine"
+            name="cuisine"
+            value={cuisine}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select Cuisine</option>
+            <option value="Filipino">Filipino</option>
+            <option value="Korean">Korean</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Indian">Indian</option>
+            <option value="Thai">Thai</option>
+            <option value="Mediterranean">Mediterranean</option>
+            <option value="French">French</option>
+            <option value="American">American</option>
+            <option value="Italian">Italian</option>
+            <option value="Chinese">Chinese</option>
+            <option value="Indonesian">Indonesian</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Others">Others</option>
+          </select>
           <label className="form-label">Cuisine:</label>
           <input
             name="cuisine"
