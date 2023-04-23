@@ -17,7 +17,7 @@ router.post("/", async (req, res, next) => {
     const user = await User.findOne({ userName: userName, deletedAt: "" });
 
     if (!user) {
-      return next(new HttpError("Incorrect username or password", 401));
+      return next(new HttpError("Incorrect username or password", 400));
     }
     const hasAccess = await bcrypt.compare(passwordInput, user.password);
     const { password, ...payload } = user._doc;
@@ -27,10 +27,11 @@ router.post("/", async (req, res, next) => {
       });
       res.json({ token });
     } else {
-      return next(new HttpError("Incorrect username or password", 401));
+      return next(new HttpError("Incorrect username or password", 400));
     }
   } catch (error) {
     console.log(error);
+    res.sendStatus(400);
   }
 });
 

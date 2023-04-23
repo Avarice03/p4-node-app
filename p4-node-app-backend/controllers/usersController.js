@@ -52,7 +52,7 @@ const userController = {
       res.send(`User ${user.userName} updated`);
     } catch (error) {
       console.log(error);
-      res.status(400).send("Error updating user.");
+      res.status(500).send("Error updating user.");
     }
   },
   deleteSingleUser: async (req, res, next) => {
@@ -80,7 +80,7 @@ const userController = {
       res.send(`${userToDelete.userName} user deleted.`);
     } catch (error) {
       console.log(error);
-      res.status(400).send("Error deleting user.");
+      res.status(500).send("Error deleting user.");
     }
   },
 };

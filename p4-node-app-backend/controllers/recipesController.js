@@ -198,7 +198,7 @@ const recipeController = {
       res.send(user);
     } catch (error) {
       console.log(error);
-      res.status(400).send("Error adding recipe");
+      res.status(500).send("Error adding recipe");
     }
   },
   updateSingleRecipe: async (req, res, next) => {
@@ -238,7 +238,7 @@ const recipeController = {
       }
     } catch (error) {
       console.log(error);
-      res.status(400).send("Error updating recipe.");
+      res.status(500).send("Error updating recipe.");
     }
   },
   deleteSingleRecipe: async (req, res, next) => {
@@ -267,7 +267,7 @@ const recipeController = {
       }
     } catch (error) {
       console.log(error);
-      res.status(400).send("Error deleting recipe.");
+      res.status(500).send("Error deleting recipe.");
     }
   },
 };

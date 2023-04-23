@@ -67,3 +67,5 @@ function App() {
 }
 
 export default App;
+
+// References: Some recipes are from allrecipes.com

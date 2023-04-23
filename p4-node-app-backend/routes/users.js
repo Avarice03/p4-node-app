@@ -17,12 +17,10 @@ router.use("/", (req, res, next) => {
     if (verified) {
       next();
     } else {
-      // res.sendStatus(401);
-      return next(new HttpError("Unauthorized", 401));
+      return next(new HttpError("Unauthorized User", 401));
     }
   } catch (err) {
-    return next(new HttpError("token not found", 401));
-    // res.sendStatus(401);
+    res.sendStatus(401);
   }
 });
 

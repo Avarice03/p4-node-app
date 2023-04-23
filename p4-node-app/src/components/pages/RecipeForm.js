@@ -177,12 +177,12 @@ function RecipeForm() {
             onChange={handleChange}
           />
           <p className="text-muted">Maximum length of 20 characters.</p>
-          <label className="form-label">Servings:</label>
+          <label className="form-label">Servings/Yield:</label>
           <input
             name="servings"
             className="form-control"
             placeholder="Servings"
-            type="number"
+            type="text"
             value={servings}
             onChange={handleChange}
           />

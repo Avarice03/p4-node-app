@@ -45,9 +45,6 @@ function RecipePage() {
     fetch();
   }, [id, tokenExists]);
 
-  console.log(tokenExists);
-  console.log(recipe);
-
   // Function for deleting recipes
   const handleDelete = async () => {
     try {

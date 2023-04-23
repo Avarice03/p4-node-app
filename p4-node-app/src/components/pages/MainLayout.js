@@ -15,7 +15,7 @@ function MainLayout() {
       </div>
       <div className="footer-container">
         <small>Uplift Code Camp</small>
-        <small>Recipes from <a href="https://www.allrecipes.com/" style={{color: "#dc3545"}}>allrecipes.com</a> </small>
+        {/* <small>Recipes from <a href="https://www.allrecipes.com/" style={{color: "#dc3545"}}>allrecipes.com</a> </small> */}
         <small>Icons by Freepik, Mark, Wahyu Adam from <a href="https://www.flaticon.com/" style={{color: "#dc3545"}}>Flaticons.com</a></small>
       </div>
     </div>
