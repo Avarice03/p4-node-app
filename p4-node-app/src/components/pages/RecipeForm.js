@@ -205,6 +205,7 @@ function RecipeForm() {
             <option value="Fruits">Fruits</option>
             <option value="Others">Others</option>
           </select>
+          <label className="form-label">Cuisine:</label>
           <select
             className="select-cuisine"
             name="cuisine"
@@ -226,15 +227,6 @@ function RecipeForm() {
             <option value="Mexican">Mexican</option>
             <option value="Others">Others</option>
           </select>
-          <label className="form-label">Cuisine:</label>
-          <input
-            name="cuisine"
-            className="form-control"
-            placeholder="Cuisine"
-            type="text"
-            value={cuisine}
-            onChange={handleChange}
-          />
           <label className="form-label">Description:</label>
           <input
             name="description"
