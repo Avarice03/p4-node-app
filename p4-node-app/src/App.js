@@ -14,6 +14,7 @@ import RecipeForm from "./components/pages/RecipeForm";
 import Signup from "./components/pages/Signup";
 import Account from "./components/pages/Account";
 import { UserDetailsProvider } from "./components/providers/UserDetailsProvider";
+import RouteGuard from "./components/HOC/RouteGuard";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,12 +25,31 @@ function App() {
         { path: "/", element: <Home /> },
         { path: "recipes", element: <Recipes /> },
         { path: "recipe/:id", element: <RecipePage /> },
-        { path: "/recipe/:id/edit-recipe", element: <RecipeForm /> },
-        { path: "/recipe/add-recipe", element: <RecipeForm /> },
+        {
+          path: "/recipe/:id/edit-recipe",
+          element: (
+              <RecipeForm />
+          ),
+        },
+        {
+          path: "/recipe/add-recipe",
+          element: (
+            <RouteGuard>
+              <RecipeForm />
+            </RouteGuard>
+          ),
+        },
         { path: "timer", element: <Timer /> },
         { path: "about-this-app", element: <About /> },
         { path: "contact-me", element: <Contact /> },
-        { path: "account", element: <Account /> },
+        {
+          path: "account",
+          element: (
+            <RouteGuard>
+              <Account />
+            </RouteGuard>
+          ),
+        },
         { path: "signup", element: <Signup /> },
         { path: "login", element: <Login /> },
       ],

@@ -17,16 +17,18 @@ function Recipes() {
   const [cuisine, setCuisine] = useState("");
   const [word, searchWord] = useState("");
   const [personal, setPersonal] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
   const BASE_URL = "https://recipeez-api.onrender.com";
   // const BASE_URL = "http://localhost:3069";
   // const token = localStorage.getItem("token-auth");
-  // console.log(isLoggedIn);
+
   useEffect(() => {
     const fetch = async () => {
       try {
+        setLoading(true);
         if (isLoggedIn) {
           if (!personal) {
             const { data } = await axios.get(
@@ -45,6 +47,7 @@ function Recipes() {
           );
           setRecipesCopy(data);
         }
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -118,7 +121,7 @@ function Recipes() {
     setRecipesCopy(searchedWord);
   };
 
-  if (!recipes) {
+  if (isLoading) {
     return (
       <img src={spinner} className="loading-image" alt="cooking cat gif" />
     );
@@ -186,7 +189,7 @@ function Recipes() {
             id="btncheck"
             onClick={() => setPersonal(!personal)}
           ></input>
-          <label className="btn btn-outline-danger" htmlFor="btncheck">
+          <label className={!personal ? "btn btn-outline-danger" : "btn btn-danger"} htmlFor="btncheck">
             Show Personal Recipes
           </label>
         </div>

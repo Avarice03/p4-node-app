@@ -34,6 +34,7 @@ function RecipePage() {
           ] = `Bearer ${tokenExists}`;
         }
         const data = await getRecipe(id);
+        console.log("data", data);
         setRecipe(data);
         setResponseMessage(data.message);
       } catch (error) {
@@ -43,6 +44,9 @@ function RecipePage() {
     };
     fetch();
   }, [id, tokenExists]);
+
+  console.log(tokenExists);
+  console.log(recipe);
 
   // Function for deleting recipes
   const handleDelete = async () => {

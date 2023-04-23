@@ -116,7 +116,7 @@ function RecipeForm() {
   };
 
   // Function to compile changes based on the data input by the user
-  const handleEdit = () => {
+  const handleEdit = (e) => {
     const newRecipe = {
       name: name,
       category: category,
@@ -177,6 +177,15 @@ function RecipeForm() {
             onChange={handleChange}
           />
           <p className="text-muted">Maximum length of 20 characters.</p>
+          <label className="form-label">Servings:</label>
+          <input
+            name="servings"
+            className="form-control"
+            placeholder="Servings"
+            type="number"
+            value={servings}
+            onChange={handleChange}
+          />
           <label className="form-label">Category:</label>
           <select
             className="select-category"
@@ -196,7 +205,6 @@ function RecipeForm() {
             <option value="Fruits">Fruits</option>
             <option value="Others">Others</option>
           </select>
-          <label className="form-label">Servings:</label>
           <select
             className="select-cuisine"
             name="cuisine"
@@ -307,7 +315,13 @@ function RecipeForm() {
         <button
           className="btn btn-danger"
           style={{ margin: "1em 0" }}
-          onClick={handleEdit}
+          onClick={() => {
+            if (name) {
+              handleEdit();
+            } else {
+              setResponseMessage("Please input name for the recipe");
+            }
+          }}
         >
           {editedRecipe ? "Edit Recipe" : "Add Recipe"}
         </button>
