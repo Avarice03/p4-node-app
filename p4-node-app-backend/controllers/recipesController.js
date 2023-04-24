@@ -83,10 +83,10 @@ const recipeController = {
     }
   },
   getUserRecipes: async (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const payload = jwt.verify(token, secret);
     try {
       const { category, cuisine } = req.query;
-      const token = req.headers.authorization.split(" ")[1];
-      const payload = jwt.verify(token, secret);
       const userRecipes = await User.findOne({
         _id: payload._id,
         deletedAt: "",

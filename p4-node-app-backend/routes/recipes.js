@@ -14,9 +14,9 @@ router.get("/", recipeController.getPublicRecipes);
 router.get("/recipe/:recipeId", recipeController.getSingleRecipe);
 
 router.use("/", (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const verified = jwt.verify(token, secret);
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    const verified = jwt.verify(token, secret);
     if (verified) {
       tokenExists = true;
       next();
@@ -28,7 +28,6 @@ router.use("/", (req, res, next) => {
     res.sendStatus(401);
   }
 });
-
 
 // GET v1/recipes/user (Get public and user recipes)
 router.get("/user", recipeController.getPublicAndUserRecipes);

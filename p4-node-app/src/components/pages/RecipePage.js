@@ -34,7 +34,6 @@ function RecipePage() {
           ] = `Bearer ${tokenExists}`;
         }
         const data = await getRecipe(id);
-        console.log("data", data);
         setRecipe(data);
         setResponseMessage(data.message);
       } catch (error) {

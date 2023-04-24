@@ -13,8 +13,9 @@ export const UserDetailsContext = createContext();
 // Provider for admin user status
 export const UserDetailsProvider = (props) => {
   const [userDetails, setUserDetails] = useState();
-  const [isLoggedIn] = useContext(UserContext);
+  const [isLoggedIn, setLoggedIn] = useContext(UserContext);
   const tokenExists = localStorage.getItem("token-auth");
+
 
   useEffect(() => {
     const fetch = async () => {
@@ -28,15 +29,17 @@ export const UserDetailsProvider = (props) => {
             setUserDetails(data);
           }
         }
-        //  else {
-        //   console.log("DITO SA ELSE PUMAPASOK");
-        //   setUserDetails();
-        // }
       } catch (error) {
-        console.log(error);
+        console.log("userDetails",error);
+        if (error.response.status === 401) {
+          localStorage.removeItem("token-auth");
+          setLoggedIn();
+          window.location.reload(true);
+        }
       }
     };
     fetch();
+    // eslint-disable-next-line
   }, [isLoggedIn, userDetails, tokenExists]);
 
   return (

@@ -10,7 +10,7 @@ import spinner from "../images/loading.gif";
 // Recipes Home page for RecipeEZ
 function Recipes() {
   const [recipes] = useContext(RecipeContext);
-  const [isLoggedIn] = useContext(UserContext);
+  const [isLoggedIn, setLoggedIn] = useContext(UserContext);
   const navigate = useNavigate();
   const [recipesCopy, setRecipesCopy] = useState(recipes);
   const [category, setCategory] = useState("");
@@ -18,12 +18,13 @@ function Recipes() {
   const [word, searchWord] = useState("");
   const [personal, setPersonal] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const tokenExists = localStorage.getItem("token-auth");
   const query = new URLSearchParams(useLocation().search);
   let categoryQuery = query.get("category");
   let cuisineQuery = query.get("cuisine");
   const BASE_URL = "https://recipeez-api.onrender.com";
   // const BASE_URL = "http://localhost:3069";
-  // const token = localStorage.getItem("token-auth");
+
 
   useEffect(() => {
     const fetch = async () => {
@@ -31,11 +32,17 @@ function Recipes() {
         setLoading(true);
         if (isLoggedIn) {
           if (!personal) {
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${tokenExists}`;
             const { data } = await axios.get(
               `${BASE_URL}/v1/recipes/user?category=${categoryQuery}&cuisine=${cuisineQuery}`
             );
             setRecipesCopy(data);
           } else {
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${tokenExists}`;
             const { data } = await axios.get(
               `${BASE_URL}/v1/recipes/user/personal?category=${categoryQuery}&cuisine=${cuisineQuery}`
             );
@@ -49,11 +56,18 @@ function Recipes() {
         }
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.log("here", error);
+        if (error.response.data.message === "jwt expired"){
+          localStorage.removeItem("token-auth");
+          setLoggedIn();
+          window.location.reload(true);
+          alert(`Session expired`);
+        }
       }
     };
     fetch();
-  }, [categoryQuery, cuisineQuery, isLoggedIn, recipes, personal]);
+    // eslint-disable-next-line
+  }, [categoryQuery, cuisineQuery, isLoggedIn, recipes, personal, tokenExists]);
 
   if (categoryQuery === null) {
     categoryQuery = "";
@@ -82,21 +96,6 @@ function Recipes() {
   const filterCategory = useCallback((category, cuisine) => {
     setCategory(category);
     setCuisine(cuisine);
-    // let selectedCategory;
-    // if (category === "All" && cuisine === "All") {
-    //   selectedCategory = recipes;
-    // } else if (category !== "All" && cuisine === "All") {
-    //   selectedCategory = recipes.filter(
-    //     (recipe) => recipe.category === category
-    //   );
-    // } else if (category === "All" && cuisine !== "All") {
-    //   selectedCategory = recipes.filter((recipe) => recipe.cuisine === cuisine);
-    // } else if (category !== "All" && cuisine !== "All") {
-    //   selectedCategory = recipes.filter(
-    //     (recipe) => recipe.category === category && recipe.cuisine === cuisine
-    //   );
-    // }
-    // setRecipesCopy(selectedCategory);
   }, []);
 
   // Function for removing category tags
@@ -189,7 +188,10 @@ function Recipes() {
             id="btncheck"
             onClick={() => setPersonal(!personal)}
           ></input>
-          <label className={!personal ? "btn btn-outline-danger" : "btn btn-danger"} htmlFor="btncheck">
+          <label
+            className={!personal ? "btn btn-outline-danger" : "btn btn-danger"}
+            htmlFor="btncheck"
+          >
             Show Personal Recipes
           </label>
         </div>

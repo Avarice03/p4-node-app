@@ -75,7 +75,7 @@ function Signup() {
             const user = {
               firstName: firstName,
               lastName: lastName,
-              userName: userName,
+              userName: userName.toLowerCase(),
               password: password,
             };
             const response = await addUser(user);
